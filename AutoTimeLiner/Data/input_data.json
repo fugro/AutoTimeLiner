@@ -1,0 +1,37 @@
+{
+    "team":"Enter TeamName Here:",
+    "start_date":"12/15/2020",
+    "ts_output":true,
+    "projects":[ 
+      { 
+          "name":"Task 1 - Description",
+          "label":"Status",
+          "date":"2/22/2020"
+       },
+       { 
+          "name":"Task 2 - Description",
+          "label":"Status",
+          "date":"1/25/2021"
+       },
+       { 
+          "name":"Task 3 - Description",
+          "label":"Status",
+          "date":"12/28/2020"
+       },
+       { 
+         "name":"Task 4 - Description",
+         "label":"Status",
+         "date":"3/15/2021"
+       },
+       { 
+         "name":"Task 5 - Description",
+         "label":"Status",
+         "date":"4/26/2021"
+       },
+       { 
+         "name":"Task 6 - Description",
+         "label":"Status",
+         "date":"6/21/2021"
+       }
+    ]
+ }
