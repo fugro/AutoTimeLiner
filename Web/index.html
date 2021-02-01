@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Roadmap Generator</title>
+    <style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        }
+    label, button {
+        font-size: 20px;
+        margin-left: 40px;
+        }
+     input {
+        font-size: 20px;
+        margin-left: 20px;
+        }
+    </style>
+    <script>
+        function parseInputFile() {
+            const fileControl = document.getElementById('inputFile');
+
+            if (!fileControl.files.length) {
+                alert('No file selected.');
+                return;
+            }
+
+            const inputFile = document.getElementById('inputFile').files[0];
+
+            console.log('file is ', inputFile);
+
+            const fileReader = new FileReader();
+            fileReader.onload = onFileReaderLoad;
+            fileReader.readAsText(inputFile);
+        }
+        
+        function onFileReaderLoad(event) {
+            const obj = JSON.parse(event.target.result);
+            console.log('read in as', obj);
+
+            callAPI(obj);
+        }
+
+        var callAPI = (inputObject) => {
+            const headers = new Headers();
+            headers.append('Content-Type', 'application/json');
+
+            const raw = JSON.stringify(inputObject);
+
+            const requestOptions = {
+                method: 'POST',
+                headers: headers,
+                body: raw,
+                redirect: 'follow'
+            };
+
+            fetch('https://alxkqkhlxk.execute-api.us-east-2.amazonaws.com/dev', requestOptions)
+            .then(response => response.text())
+            .then(result => {
+				const base64 = JSON.parse(result);
+				document.getElementById('resultImage').innerHTML = '<img src="data:image/png;base64, ' + base64 + '" />';
+			})
+            .catch(error => console.log('error', error));
+        }
+
+        function uploadFile() {
+            parseInputFile();
+        }
+    </script>
+</head>
+<body>
+    <h1>Roadmap Generator</h1>
+    <form>
+        <input id="inputFile" type="file" onchange="uploadFile()" />
+    </form>
+	<hr />
+	<div id="resultImage"></div>
+</body>
+</html>
