@@ -3,8 +3,8 @@ import json
 import datetime as dt
 import os
 from TimeLineEvent import TimeLineEvent
+from Positions import Positions
 from PIL import Image, ImageDraw, ImageFont
-import numpy as np
 import sys
 
 Q1_COLOR = (71, 156, 170)
@@ -33,34 +33,34 @@ LINE_WIDTH = 3
 DOGLEG_WIDTH = 30
 
 def is_valid():
-    if len(sys.argv) == 1 and not os.path.exists(DATA_FILE_PATH):
+    if (len(sys.argv) == 1 and not os.path.exists(DATA_FILE_PATH)):
         print ("No json file path provided, and " + DATA_FILE_PATH +" missing")
         return False
     
-    if len(sys.argv) > 2:
+    if (len(sys.argv) > 2):
         print ("Invalid number of arguments provided! See Usage information!")
         return False
-    elif len(sys.argv) == 2 and not os.path.exists(sys.argv[1]):
+    elif (len(sys.argv) == 2 and not os.path.exists(sys.argv[1])):
         print ("Provided data file " + sys.argv[1] + "doesn't exit!")
         return False
 
-    if not os.path.exists(OUTPUT_PATH):
+    if (not os.path.exists(OUTPUT_PATH)):
         print("Output directory doesn't exist - Creating directory.")
         os.mkdir(OUTPUT_PATH)
     
-    if not os.path.exists(TEMPLATE_PATH):
+    if (not os.path.exists(TEMPLATE_PATH)):
         print(TEMPLATE_PATH + " missing!")
         return False
     
-    if not os.path.exists(LOGO_PATH):
+    if (not os.path.exists(LOGO_PATH)):
         print (LOGO_PATH + " missing!")
         return False
 
-    if not os.path.exists(FONT_PATH):
+    if (not os.path.exists(FONT_PATH)):
         print(FONT_PATH + " missing!")
         return False
 
-    if not os.path.exists(FONT_PATH_BOLD):
+    if (not os.path.exists(FONT_PATH_BOLD)):
         print(FONT_PATH_BOLD + " missing!")
         return False
     
@@ -70,13 +70,13 @@ def get_julian_day(year, month, day):
     return dt.date(year, month, day).timetuple().tm_yday
 
 def get_start_day(year, quarter):
-    if quarter == 1:
+    if (quarter == 1):
         return 1
-    elif quarter == 2:
+    elif (quarter == 2):
         return get_julian_day(year, 4, 1)
-    elif quarter == 3:
+    elif (quarter == 3):
         return get_julian_day(year, 7, 1)
-    elif quarter == 4:
+    elif (quarter == 4):
         return get_julian_day(year, 10, 1)
 
 def create_quarters(start_date):
@@ -89,7 +89,7 @@ def create_quarters(start_date):
     for i in range(4):
         start_day = get_start_day(year, quarter)
         quarters[i] = (year, quarter, start_day)
-        if quarter == 4:
+        if (quarter == 4):
             year += 1
             quarter = 1
         else:
@@ -103,26 +103,22 @@ def get_image_data(path):
     return im
 
 def write_image(im, ts_output):
-    if ts_output == True:
+    if (ts_output == True):
         format = "%Y-%m-%d_%H-%M-%S"
         filename = dt.datetime.now().strftime(format) + ".png"
-        print(filename)
         im.save(f"{OUTPUT_PATH}{filename}")
     else:
         im.save(f"{OUTPUT_PATH}latest.png")
 
-def bake_in_dogleg(template, zz_tuple, height, is_top_space):
-
+def bake_in_dogleg(template, x, y, area):
     draw = ImageDraw.Draw(template)
-    x, y = zz_tuple
-
-    if is_top_space:
-        line = (x + DOGLEG_WIDTH, y-25, x, y -25, x, y+height)
-        draw.line(line, fill=(0, 0, 0), width=3)
-
+    line = (x, y, x + DOGLEG_WIDTH, y)
+    draw.line(line, fill=(0,0,0), width=3)
+    if (area == "top"):
+        line = (x, y, x, TOP_BOTTOM_PIXEL)
     else:
-        line = (x+DOGLEG_WIDTH, y-15, x, y-15, x, y-height)
-        draw.line(line, fill=(0, 0, 0), width=3)
+        line = (x, y, x, BOTTOM_TOP_PIXEL)
+    draw.line(line, fill=(0,0,0), width=3)
 
     return template
 
@@ -130,21 +126,27 @@ def make_placard(time_line_event, placard_type):
 
     len_of_name = len(time_line_event.name)
     len_of_label = len(time_line_event.label)
-    if len_of_label > len_of_name:
-        width_of_words = 6 * (len_of_label+10)
+    if (len_of_label > len_of_name):
+        width_of_words = 10 * (len_of_label)
     else:
-        width_of_words = 6 * (len_of_name+10)
-    height_of_words = 15 * 5
+        width_of_words = 10 * (len_of_name)
+    if (width_of_words < 90):
+        width_of_words = 90
+    height_of_words = 60
 
     text_to_render = ""
     
-    date_string = f"Date: {time_line_event.get_MDY_date()}"
-    date_width_of_words = (len(date_string)+10)
+    date_string = f"{time_line_event.get_MDY_date()}"
+    date_width_of_words = (len(date_string))
 
-    if date_width_of_words > width_of_words:
+    if (date_width_of_words > width_of_words):
         width_of_words = date_width_of_words
 
-    text_to_render = f"{time_line_event.name}\n{time_line_event.label}\n{date_string}"
+    if (time_line_event.name.strip() != ""):
+        text_to_render = f"{time_line_event.name}\n"
+    if (time_line_event.label.strip() != ""):
+        text_to_render = f"{text_to_render}{time_line_event.label}\n"
+    text_to_render = f"{text_to_render}{date_string}"
 
     img = Image.new("RGBA", (width_of_words, height_of_words),
                     color=(255, 255, 255))
@@ -172,7 +174,7 @@ def make_quarters():
 
 def open_projects_data():
 
-    if len(sys.argv) > 1:
+    if (len(sys.argv) > 1):
         with open(sys.argv[1], 'r') as read_json:
             input_data = json.load(read_json)
     else:
@@ -193,22 +195,17 @@ def convert_text_dates_to_datetimes(data_dict):
     data_dict['projects'] = formatted_projects
     return data_dict
 
-def bake_placcard_into_template(zz_pixel_tup, img, placard):
-
-    if zz_pixel_tup[1] >= BOTTOM_TOP_PIXEL:
-        img.paste(placard, (zz_pixel_tup[0], zz_pixel_tup[1]+10))
-    else:
-        img.paste(placard, (zz_pixel_tup[0], zz_pixel_tup[1]))
-
+def bake_placard_into_template(x, img, placard, y):
+    img.paste(placard, (x, y))
     return img
 
 def calc_julian_day(year, quarter):
     start = dt.date(year, (((quarter - 1) * 3) + 1), 1).timetuple().tm_yday - 1
-    if quarter == 1:
+    if (quarter == 1):
         end = get_julian_day(year, 3, 31)
-    elif quarter == 2:
+    elif (quarter == 2):
         end = get_julian_day(year, 6, 30)
-    elif quarter == 3:
+    elif (quarter == 3):
         end = get_julian_day(year, 9, 30)
     else:
         end = get_julian_day(year, 12, 31)
@@ -235,7 +232,7 @@ def auto_time_liner():
     start_date = data['start_date']
 
     # output file will contain timestamp prefix if ts_output exists in json file.
-    if 'ts_output' in data.keys():
+    if ('ts_output' in data.keys()):
         ts_output = data['ts_output']
     else:
         # default to false
@@ -264,8 +261,7 @@ def auto_time_liner():
                                               project['label'],
                                               project['date']))
 
-    img_data = get_image_data(TEMPLATE_PATH)
-    # builds  placards
+    # build placards
     placards = []
     max_placard_height = -99
 
@@ -277,98 +273,77 @@ def auto_time_liner():
         index += 1
     
     order = sorted(order.items(), key = lambda x:x[1])
-    
+
     ordered = {}
     inx = 0
     #Get items from start quarter
     for i in range(len(order)):
-         if order[i][1] >= quarters[0][2]:
+         if (order[i][1] >= quarters[0][2]):
              ordered[inx] = (order[i][0], order[i][1])
              inx += 1
     for i in range(len(order)):
-         if order[i][1] < quarters[0][2]:
+         if (order[i][1] < quarters[0][2]):
              ordered[inx] = (order[i][0], order[i][1])
              inx += 1
 
-    if len(ordered) == 6:
-        temp =ordered[5]
-        ordered[5] = ordered[3]
-        ordered[3] = temp
-    elif len(ordered) == 5:
-        temp = ordered[4]
-        ordered[3] = ordered[4]
-        ordered[4] = temp
-        
     #sort by order
     for i in range(len(order)):
         for placard_name in time_line_events[ordered[i][0]].get_field_names():
             placard_inx = len(placards)
             zero_zero_placard_pixels[placard_inx] = {"x": julian_day_to_h_pixel_map[time_line_events[ordered[i][0]].get_julian_date()], "y": -1}
             img = make_placard(time_line_events[ordered[i][0]], placard_name)
-            if img.size[1] > max_placard_height:
+            if (img.size[1] > max_placard_height):
                 max_placard_height = img.size[1]
 
             placards.append(img)
 
-    top_placard_v_pix = [p for p in range(TOP_TOP_PIXEL, TOP_BOTTOM_PIXEL)]
-    bottom_placard_v_Pix = [p for p in range(
-        BOTTOM_TOP_PIXEL, BOTTOM_BOTTOM_PIXEL)]
-
-    # Collects relevant info about where to put stuff
-    in_top_space = True
-    current_zz_v_pix = top_placard_v_pix[0]
-    for i in range(0, len(placards)):
-        placard = placards[i]
-
-        if in_top_space:
-            if current_zz_v_pix > top_placard_v_pix[-1]:
-                in_top_space = False
-                current_zz_v_pix = bottom_placard_v_Pix[0]
-        else:
-            if current_zz_v_pix > bottom_placard_v_Pix[-1]:
-                in_top_space = True
-                current_zz_v_pix = top_placard_v_pix[0]
-
-        zero_zero_placard_pixels[i]["y"] = current_zz_v_pix
-
-        current_zz_v_pix += (placard.size[1]+2)
-
     # puts stuff on the image
-
     template = get_image_data(TEMPLATE_PATH)
-
-    for i in range(0, len(placards)):
+    
+    area = "top"
+    index = 2
+    previous_dogleg_position = 0
+    last_placard = False
+    for i in range(0, len(order)):
         placard = placards[i]
-        if zero_zero_placard_pixels[i]['x'] + DOGLEG_WIDTH + placard.width > HORZ_STOP_PIXEL:
+        x = zero_zero_placard_pixels[i]['x']
+        if (x + DOGLEG_WIDTH + placard.width > HORZ_STOP_PIXEL):
             # try to center on Line
-            xy_tuple = (zero_zero_placard_pixels[i]['x'] - int(np.floor(placard.width / 2)), zero_zero_placard_pixels[i]['y'])
-            #xy_tuple = ((HORZ_STOP_PIXEL - int(np.floor(placard.width / 2)), zero_zero_placard_pixels[i]['y']))
+            placard_x = x - int(placard.width / 2)
         else:
-            xy_tuple = (zero_zero_placard_pixels[i]
-                        ['x']+DOGLEG_WIDTH, zero_zero_placard_pixels[i]['y'])
-        is_top_space = zero_zero_placard_pixels[i]['y'] <= top_placard_v_pix[-1]
+            placard_x = x
 
-        y_val = int(np.floor((zero_zero_placard_pixels[i]["y"]+placard.size[1] -
-                              zero_zero_placard_pixels[i]['y'])/2.0) + zero_zero_placard_pixels[i]['y'])
+        if (placard_x <= previous_dogleg_position):
+            last_placard = True
+            index = 2
+            if (area == "bottom"):
+                area = "top"
+            else:
+                area = "bottom"
 
-        if is_top_space:
-            height = TOP_BOTTOM_PIXEL-y_val
+        if (index == -1 and last_placard == False):
+            if (index == -1):
+                index = 2
+            if (area == "bottom"):
+                area = "top"
+            else:
+                area = "bottom"
+
+        if (area == "top"): # (i <= 2):
+            area = "top"
+            template = bake_in_dogleg(template, x, Positions("dogleg", area, index).GetY(), area)
+            template = bake_placard_into_template(placard_x + DOGLEG_WIDTH, template, placard, Positions("placard", area, index).GetY())
+            index -= 1
         else:
-            height = y_val - BOTTOM_TOP_PIXEL
-        template = bake_in_dogleg(
-            template, (zero_zero_placard_pixels[i]['x'], y_val), height, is_top_space)
-        
-    for i in range(0, len(placards)):
-        placard = placards[i]
-        if zero_zero_placard_pixels[i]['x'] + DOGLEG_WIDTH + placard.width > HORZ_STOP_PIXEL:
-            # try to center on Line
-            xy_tuple = (zero_zero_placard_pixels[i]['x'] - int(np.floor(placard.width / 2)), zero_zero_placard_pixels[i]['y'])
-            #xy_tuple = ((HORZ_STOP_PIXEL - int(np.floor(placard.width / 2)), zero_zero_placard_pixels[i]['y']))
-        else:
-            xy_tuple = (zero_zero_placard_pixels[i]
-                        ['x']+DOGLEG_WIDTH, zero_zero_placard_pixels[i]['y'])
-        template = bake_placcard_into_template(xy_tuple, template, placard)
-    # Add Team to Image.
+            area = "bottom"
+            template = bake_in_dogleg(template, x, Positions("dogleg", area, index).GetY(), area)
+            template = bake_placard_into_template(placard_x + DOGLEG_WIDTH, template, placard, Positions("placard", area, index).GetY())
+            index -= 1
+        previous_dogleg_position = x
+        if (last_placard):
+            break
+
+    # Add Team to Image._
     draw = ImageDraw.Draw(template)
     fnt = ImageFont.truetype(FONT_PATH, 31)
     draw.text((100, 178),team,(40,40,40),font=fnt)
@@ -386,6 +361,6 @@ def auto_time_liner():
 
     template.show()
 
-if __name__ == "__main__":
-    if is_valid():
+if (__name__ == "__main__"):
+    if (is_valid()):
         auto_time_liner()
