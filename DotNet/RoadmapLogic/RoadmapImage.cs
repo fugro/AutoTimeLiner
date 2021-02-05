@@ -33,7 +33,10 @@ namespace RoadmapLogic
 
             using (var image = new Image<Rgba32>(1486, 839))
             {
-                image.Mutate(x => x.DrawText("Product delivery roadmap", headerFont, Color.Black, new PointF(100, 59) ));
+                // Draw short line just above image title
+                image.Mutate(x => x.DrawLines(FugroColors.QuantumBlue, 3.3f, new PointF(85, 45), new PointF(185, 45)));
+
+                image.Mutate(x => x.DrawText("Product delivery roadmap", headerFont, FugroColors.QuantumBlue, new PointF(100, 59) ));
 
                 image.Mutate(x => x.DrawText(teamText, teamFont, Color.Black, new PointF(100, 184)));
 
@@ -44,10 +47,10 @@ namespace RoadmapLogic
                 int chevronHeight = 50;
                 IPath chevronPath;
                 Color[] chevronColors = {
-                    Color.FromRgb(47, 68, 93),
-                    Color.FromRgb(71, 156, 170),
-                    Color.FromRgb(140, 182, 128),
-                    Color.FromRgb(217, 190, 137)
+                    FugroColors.WhatColorIsThisBlue,
+                    FugroColors.StrataTurquoise,
+                    FugroColors.MotionGreen,
+                    FugroColors.CosmicSand
                 };
 
                 for (int i = 0; i < 4; i++)
