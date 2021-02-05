@@ -28,11 +28,14 @@ namespace RoadmapLogic
 
             var teamText = string.IsNullOrWhiteSpace(input.Team) ? "[No team supplied]" : input.Team;
 
+            var width = 1486;
+            var height = 839;
+
             using (var image = new Image<Rgba32>(1486, 839))
             {
                 image.Mutate(x => x.DrawText("Product delivery roadmap", headerFont, Color.Black, new PointF(100, 59) ));
 
-                image.Mutate(x => x.DrawText(teamText, teamFont, Color.Black, new PointF(100, 200)));
+                image.Mutate(x => x.DrawText(teamText, teamFont, Color.Black, new PointF(100, 184)));
 
                 // Draw chevron/flag symbols
                 int chevronXStart = 103;
@@ -58,6 +61,8 @@ namespace RoadmapLogic
                 image.Mutate(x => x.DrawText("2021 Q3", chevronFont, Color.White, new PointF(520, 464)));
                 image.Mutate(x => x.DrawText("2021 Q4", chevronFont, Color.White, new PointF(830, 464)));
                 image.Mutate(x => x.DrawText("2022 Q1", chevronFont, Color.White, new PointF(1140, 464)));
+
+                image.DrawImage(FontsBase64.FugroLogoQuantumBlueBase64, new Point(width - 224, height - 86), 1);
 
                 using (var ms = new MemoryStream())
                 {
