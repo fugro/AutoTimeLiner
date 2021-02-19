@@ -10,7 +10,7 @@ namespace RoadmapLambda
     {
         public string FunctionHandler(Input input, ILambdaContext context)
         {
-            var image = RoadmapImage.MakeImage(input);
+            var image = RoadmapImage.MakeImage(input, Settings.Default);
 
             return new Base64Converter().ToBase64(image);
         }
