@@ -8,6 +8,7 @@
             Label = label;
             Date = date;
         }
+
         public string Name { get; }
 
         public string Label { get; }
