@@ -1,5 +1,4 @@
-﻿using System;
-namespace RoadmapLogic
+﻿namespace RoadmapLogic
 {
     public class Settings
     {
@@ -60,6 +59,7 @@ namespace RoadmapLogic
         { 
             get; 
         }
+
         public int ImageHeight
         {
             get;

@@ -27,22 +27,24 @@ namespace RoadmapLogic
             using (var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight))
             {
                 // Draw short line just above image title
-                image.Mutate(x => x.DrawLines(FugroColors.QuantumBlue, 3.3f, new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25), new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)));
+                image.Mutate(x => x.DrawLines(
+                    FugroColors.QuantumBlue,
+                    3.3f,
+                    new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25),
+                    new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)));
 
-                image.Mutate(x => x.DrawText(settings.Heading.Title, headerFont, settings.Heading.Color,
+                image.Mutate(x => x.DrawText(
+                    settings.Heading.Title,
+                    headerFont,
+                    settings.Heading.Color,
                     new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize))));
                 
-                image.Mutate(x => x.DrawText(teamText, teamFont, Color.Black,
+                image.Mutate(x => x.DrawText(
+                    teamText,
+                    teamFont,
+                    Color.Black,
                     new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.FontSize - 10)));
-
-                IPath chevronPath;
-                Color[] chevronColors = {
-                    FugroColors.WhatColorIsThisBlue,
-                    FugroColors.StrataTurquoise,
-                    FugroColors.MotionGreen,
-                    FugroColors.CosmicSand
-                };
-
+                
                 if (Quarter.GetQuarters(input.StartDate, out List<Quarter> quarters))
                 {
                     var positions = Calculations.JulianDayToPixel(settings, quarters);
@@ -54,13 +56,15 @@ namespace RoadmapLogic
                         if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
                         {
                             // Draw DogLeg
-                            image.Mutate(x => x.DrawLines(Color.Black, 3, new DogLeg(xPos,index, settings, position).Points));    
+                            image.Mutate(x => x.DrawLines(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points));
                             
                             // Draw Placard
 
                             if (index == 2)
                             {
-                                position = position == Position.Top ? Position.Bottom : Position.Top;
+                                position = position == Position.Top
+                                    ? Position.Bottom
+                                    : Position.Top;
                                 index = 0;
                             }
                             else
@@ -69,26 +73,13 @@ namespace RoadmapLogic
                             }
                         }
                     }
+                    
+                    DrawQuarters(image, settings, quarters, chevronFont);
 
-                    // Draw chevron/flag symbols
-                    var chevronXStart = (float)settings.Margin.Left;
-
-                    for (int i = 0; i < 4; i++)
-                    {
-                        chevronPath = BuildChevronSymbol(chevronXStart, settings.MidPoint - (settings.ChevronHeight / 2), settings);
-                        image.Mutate(x => x.Fill(chevronColors[i], chevronPath));
-                        chevronXStart += settings.ChevronLength + settings.ChevronGap;
-                    }
-
-                    float offset = 210;
-                    foreach (var quarter in quarters)
-                    {
-                        image.Mutate(x => x.DrawText($"{quarter.Year} Q{quarter.Index}", chevronFont, Color.White,
-                            new PointF(offset, 464)));
-                        offset += settings.ChevronLength;
-                    }
-
-                    image.DrawImage(FontsBase64.FugroLogoQuantumBlueBase64, new Point(settings.ImageWidth - 224, settings.ImageHeight - 86), 1);
+                    image.DrawImage(
+                        FontsBase64.FugroLogoQuantumBlueBase64,
+                        new Point(settings.ImageWidth - 224, settings.ImageHeight - 86),
+                        1);
                 }
 
                 using (var ms = new MemoryStream())
@@ -96,6 +87,39 @@ namespace RoadmapLogic
                     image.SaveAsPng(ms);
                     return ms;
                 }
+            }
+        }
+
+        private static void DrawQuarters(Image<Rgba32> image, Settings settings, List<Quarter> quarters, Font chevronFont)
+        {
+            IPath chevronPath;
+            Color[] chevronColors = {
+                FugroColors.WhatColorIsThisBlue,
+                FugroColors.StrataTurquoise,
+                FugroColors.MotionGreen,
+                FugroColors.CosmicSand
+            };
+
+            var chevronXStart = (float)settings.Margin.Left;
+
+            for (int i = 0; i < 4; i++)
+            {
+                chevronPath = BuildChevronSymbol(chevronXStart, settings.MidPoint - (settings.ChevronHeight / 2), settings);
+                image.Mutate(x => x.Fill(chevronColors[i], chevronPath));
+                chevronXStart += settings.ChevronLength + settings.ChevronGap;
+            }
+
+            float xOffset = 210;
+            const float yOffset = 464;
+            foreach (var quarter in quarters)
+            {
+                image.Mutate(x => x.DrawText(
+                    quarter.ToString(),
+                    chevronFont,
+                    Color.White,
+                    new PointF(xOffset, yOffset)));
+
+                xOffset += settings.ChevronLength;
             }
         }
 

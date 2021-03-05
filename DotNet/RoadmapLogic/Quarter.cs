@@ -7,7 +7,11 @@ namespace RoadmapLogic
     public class Quarter
     {
         public int Year { get; }
-        public int Index { get; set; }
+
+        /// <summary>
+        /// The number of this quarter from 1 to 4.
+        /// </summary>
+        public int Index { get; }
 
         public Quarter(int year, int index)
         {
@@ -62,6 +66,11 @@ namespace RoadmapLogic
             {
                 return false;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"{Year} Q{Index}";
         }
     }
 }
