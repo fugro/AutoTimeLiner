@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace RoadmapLogic.Tests
@@ -10,7 +11,19 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImage()
         {
-            var imageStream = RoadmapImage.MakeImage(new Input { Team = "Fugro" });
+            var Projects = new List<Project>
+            {
+                new Project("Task 1 - Description", "Status", "2/22/2020"),
+                new Project("Task 3 - Description", "Status", "1/25/2021"),
+                new Project("Task 5 - Description", "Status", "12/28/2020"),
+                new Project("Task 1 - Description", "Status", "3/15/2021"),
+                new Project("Task 3 - Description", "Status", "4/26/2021"),
+                new Project("Task 5 - Description", "Status", "6/21/2021")
+            };
+
+            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects);
+
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
 
             var bytes = imageStream.ToArray();
 

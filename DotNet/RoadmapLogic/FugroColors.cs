@@ -11,7 +11,6 @@ namespace RoadmapLogic
         /// TODO: This is like a lighter version of QuantumBlue. Can't find it in branding docs.
         /// </summary>
         public static Color WhatColorIsThisBlue = Color.FromRgb(47, 68, 93);
-
         public static Color PulseBlue = Color.FromRgb(103, 136, 177);
         public static Color StrataTurquoise = Color.FromRgb(71, 156, 170);
         public static Color CosmicSand = Color.FromRgb(217, 190, 137);
