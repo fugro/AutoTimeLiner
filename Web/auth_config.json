@@ -1,0 +1,6 @@
+{
+    "domain": "<domain>",
+    "clientId": "<clientId>",
+    "audience": "<audience>",
+    "apiUrl": "<apiUrl>"
+}

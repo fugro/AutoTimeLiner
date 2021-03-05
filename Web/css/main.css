@@ -1,0 +1,50 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+button {
+    border: 0;
+    border-radius:4px;
+}
+
+a, a:visited {
+    color: #6788B1;
+}
+
+.hidden {
+    display: none;
+}
+
+label {
+    margin-bottom: 10px;
+    display: block;
+}
+
+header {
+    background-color: #3D5F73;
+    color: #FFF;
+    padding: 5px;
+}
+
+header a, header a:visited {
+    color: #FFF;
+}
+
+p {
+    font-size: larger;
+}
+
+#public-content {
+    margin-top: 50px;
+    margin-left:20px;
+}
+
+#gated-content {
+    margin-left: 20px
+}
+
+p.error {
+    color: #E63519;
+}
