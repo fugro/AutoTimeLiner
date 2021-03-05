@@ -1,0 +1,5 @@
+{
+    "type" : "TOKEN",
+    "authorizationToken" : "Bearer put_your_token_here",
+    "methodArn":"put_your_api_gateway_method_arn_here"
+}
