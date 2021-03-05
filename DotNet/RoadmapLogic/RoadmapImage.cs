@@ -123,7 +123,7 @@ namespace RoadmapLogic
             }
         }
 
-        private static List<Project> SortProjects(List<Project> projects, Quarter startQuarter)
+        private static List<Project> SortProjects(IEnumerable<Project> projects, Quarter startQuarter)
         {
             projects = projects.OrderBy(p => Calculations.GetJulianDay(p.Date)).ToList();
 

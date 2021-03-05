@@ -4,16 +4,17 @@ namespace RoadmapLogic
 {
     public class Input
     {
-        public Input(string team, string startDate, List<Project> projects)
+        public Input(string team, string startDate, IEnumerable<Project> projects)
         {
             Team = team;
             StartDate = startDate;
             Projects = projects;
         }
+
         public string Team { get; }
 
         public string StartDate { get; }
 
-        public List<Project> Projects { get; }
+        public IEnumerable<Project> Projects { get; }
     }
 }
