@@ -14,7 +14,20 @@
         /// <param name="chevronGap"></param>
         /// <param name="dogLegWidth"></param>
         /// <param name="fontSize"></param>        
-        public Settings(int imageWidth, int imageHeight, Margin margin, int midpoint, int chevronHeight, int chevronOffset, int chevronGap, float dogLegWidth, int fontSize)
+        public Settings(
+            int imageWidth,
+            int imageHeight,
+            Margin margin,
+            int midpoint,
+            int chevronHeight,
+            int chevronOffset,
+            int chevronGap,
+            float dogLegWidth,
+            int fontSize,
+            int[] topOffsets,
+            int[] bottomOffsets,
+            int placardXSpacing,
+            int placardYSpacing)
         {
             Heading = new Heading();
             ImageWidth = imageWidth;
@@ -28,9 +41,14 @@
             DogLegWidth = dogLegWidth;
             FontSize = fontSize;
             PlotHeight = ImageHeight - Margin.Bottom - MidPoint - (ChevronHeight / 2);
+            TopOffsets = topOffsets;
+            BottomOffsets = bottomOffsets;
+            PlacardXSpacing = placardXSpacing;
+            PlacardYSpacing = placardYSpacing;
         }
 
-        public static Settings Default => new Settings(1486, 839, new Margin(103, 70), 485, 50, 25, 4, 30, 32);
+        public static Settings Default => new Settings(1486, 839, new Margin(103, 70), 485, 50, 25, 4, 30, 32,
+            new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20);
 
         /// <summary>
         /// Plot Border (X, Y)
@@ -91,6 +109,26 @@
         }
 
         public float PlotHeight
+        {
+            get;
+        }
+
+        public int[] TopOffsets
+        {
+            get;
+        }
+
+        public int[] BottomOffsets
+        {
+            get;
+        }
+
+        public int PlacardXSpacing
+        {
+            get;
+        }
+
+        public int PlacardYSpacing
         {
             get;
         }

@@ -21,6 +21,7 @@ namespace RoadmapLogic
             var headerFont = normalFontFamily.CreateFont(settings.Heading.FontSize);
             var teamFont = normalFontFamily.CreateFont(settings.FontSize);
             var chevronFont = boldFontFamily.CreateFont(36);
+            var placardFont = normalFontFamily.CreateFont(16);
 
             var teamText = string.IsNullOrWhiteSpace(input.Team) ? "[No team supplied]" : input.Team;
 
@@ -57,9 +58,10 @@ namespace RoadmapLogic
                         {
                             // Draw DogLeg
                             image.Mutate(x => x.DrawLines(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points));
-                            
-                            // Draw Placard
 
+                            // Draw Placard
+                            Placard.Draw(image, project, new PlacardLocation(xPos, index, settings, position).Points, placardFont);
+                            
                             if (index == 2)
                             {
                                 position = position == Position.Top
