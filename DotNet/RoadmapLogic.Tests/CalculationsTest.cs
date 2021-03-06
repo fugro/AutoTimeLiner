@@ -37,7 +37,8 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void JulianDayToPixelTest()
         {
-            Settings settings = new Settings(378, 366, new Margin(0, 0), 485, 50, 23, 4, 50, 32);
+            Settings settings = new Settings(378, 366, new Margin(0, 0), 485, 50, 23, 4, 50, 32,
+                                            new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20);
 
             if (Quarter.GetQuarters("3/1/2020", out List<Quarter> quarters))
             {

@@ -31,6 +31,28 @@ namespace RoadmapLogic.Tests
         }
 
         [TestMethod]
+        public void CreateAndSaveImageWithEmptyValues()
+        {
+            var Projects = new List<Project>
+            {
+                new Project(string.Empty, "Status", "2/22/2020"),
+                new Project("Task 3 - Description", string.Empty, "1/25/2021"),
+                new Project("Task 5 - Description", "Status", string.Empty),
+                new Project("Task 1 - Description", string.Empty, string.Empty),
+                new Project(string.Empty, string.Empty, "4/26/2021"),
+                new Project(string.Empty, "Status", string.Empty)
+            };
+
+            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects);
+
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+
+            var bytes = imageStream.ToArray();
+
+            File.WriteAllBytes($"test-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+        }
+
+        [TestMethod]
         [Ignore("Run manually to generate a .txt file of Base64 data from an image file.")]
         public void FileToBase64()
         {
