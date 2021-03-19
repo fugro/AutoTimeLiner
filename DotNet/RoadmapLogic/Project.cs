@@ -1,4 +1,6 @@
-﻿namespace RoadmapLogic
+﻿using System.Collections.Generic;
+
+namespace RoadmapLogic
 {
     public class Project
     {
@@ -14,5 +16,10 @@
         public string Label { get; }
 
         public string Date { get; }
+
+        public List<string> ToList()
+        {
+            return new List<string>() { Name, Label, Date };
+        }
     }
 }

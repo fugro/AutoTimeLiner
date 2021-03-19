@@ -2,7 +2,7 @@
 {
     public enum Position
     {
-        Top,
-        Bottom
+        Top = 0,
+        Bottom = 1
     }
 }

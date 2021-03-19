@@ -15,6 +15,7 @@ namespace RoadmapLogic
     {
         public static MemoryStream MakeImage(Input input, Settings settings)
         {
+            const string MissingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
             var normalFontFamily = GetFontFamily(FontWeight.Normal);
             var boldFontFamily = GetFontFamily(FontWeight.Bold);
 
@@ -22,6 +23,7 @@ namespace RoadmapLogic
             var teamFont = normalFontFamily.CreateFont(settings.FontSize);
             var chevronFont = boldFontFamily.CreateFont(36);
             var placardFont = normalFontFamily.CreateFont(16);
+            RendererOptions rendererOptions = new RendererOptions(placardFont);
 
             var teamText = string.IsNullOrWhiteSpace(input.Team) ? "[No team supplied]" : input.Team;
 
@@ -45,28 +47,98 @@ namespace RoadmapLogic
                     teamFont,
                     Color.Black,
                     new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.FontSize - 10)));
-                
+
+                bool hasMissingProjects = false;
+
                 if (Quarter.GetQuarters(input.StartDate, out List<Quarter> quarters))
                 {
                     var positions = Calculations.JulianDayToPixel(settings, quarters);
                     var projects = SortProjects(input.Projects, quarters[0]);
                     Position position = Position.Top;                    
                     int index = 0;
+                    var placardEndPixel = new float[,] 
+                    { 
+                        { 0F, 0F, 0F }, 
+                        { 0F, 0F, 0F } 
+                    };
+                    
+                    float temp = 0F;
+                    int count = 0;
+                    
                     foreach (var project in projects)
-                    {                                                
+                    {
                         if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
                         {
+                            if (index == 0)
+                            {
+                                int i = index;
+                                for (; i < 2; i++)
+                                {
+                                    if (xPos > placardEndPixel[(int)position, i])
+                                    {
+                                        index = i;
+                                        break;
+                                    }
+                                }
+                                if (i == 2)
+                                {
+                                    hasMissingProjects = true;
+                                    continue;
+                                }
+                            }
+
+                            var placardPoints = new PlacardLocation(xPos, index, settings, position).Points;
+                            float placardWidth = 0;
+
+                            foreach (var item in project.ToList())
+                            {
+                                if (placardWidth < TextMeasurer.Measure(item, rendererOptions).Width)
+                                {
+                                    placardWidth = TextMeasurer.Measure(item, rendererOptions).Width;
+                                    temp = placardPoints[0].X + placardWidth;
+                                }
+                            }
+
+                            if (temp > placardEndPixel[(int)position, index])
+                            {
+                                placardEndPixel[(int)position, index] = temp;
+                            }
+
                             // Draw DogLeg
                             image.Mutate(x => x.DrawLines(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points));
 
-                            // Draw Placard
-                            Placard.Draw(image, project, new PlacardLocation(xPos, index, settings, position).Points, placardFont);
-                            
+                            if (temp > settings.ImageWidth)
+                            {
+                                placardPoints = new PlacardLocation(xPos, index, settings, position, true).Points;
+                            }
+
+                            if (count < 1)
+                            {
+                                // Draw Placard
+                                Placard.Draw(image, project, placardPoints, placardFont, temp, TextMeasurer.Measure("|", rendererOptions).Height * 3);
+                            }
+
                             if (index == 2)
                             {
-                                position = position == Position.Top
-                                    ? Position.Bottom
-                                    : Position.Top;
+                                if (placardEndPixel[(int)position, 1] < placardEndPixel[(int)position, index])
+                                {
+                                    placardEndPixel[(int)position, 1] = placardEndPixel[(int)position, index];
+                                }
+
+                                if (placardEndPixel[(int)position, 0] < placardEndPixel[(int)position, index])
+                                {
+                                    placardEndPixel[(int)position, 0] = placardEndPixel[(int)position, index];
+                                }
+
+                                if (position == Position.Top)
+                                {
+                                    position = Position.Bottom;
+                                }
+                                else
+                                {
+                                    position = Position.Top;
+                                }
+
                                 index = 0;
                             }
                             else
@@ -77,6 +149,15 @@ namespace RoadmapLogic
                     }
                     
                     DrawQuarters(image, settings, quarters, chevronFont);
+
+                    if (hasMissingProjects)
+                    {
+                        image.Mutate(x => x.DrawText(
+                        MissingProjectMessageText,
+                        placardFont, 
+                        Color.Red, 
+                        new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(MissingProjectMessageText, rendererOptions).Height)));
+                    }
 
                     image.DrawImage(
                         FontsBase64.FugroLogoQuantumBlueBase64,
@@ -157,8 +238,8 @@ namespace RoadmapLogic
                     list2.Add(project);
                 }
             }
-            list.AddRange(list2);
-            
+
+            list.AddRange(list2);            
             return list;
         }
 
