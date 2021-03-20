@@ -49,7 +49,7 @@ namespace RoadmapLogic.Tests
 
             var bytes = imageStream.ToArray();
 
-            File.WriteAllBytes($"test-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+            File.WriteAllBytes($"missingdata-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
         }
 
         [TestMethod]

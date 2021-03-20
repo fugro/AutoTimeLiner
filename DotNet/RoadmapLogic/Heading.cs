@@ -4,12 +4,16 @@ namespace RoadmapLogic
 {
     public class Heading
     {
-        public Heading()
+        public Heading(
+            string title,
+            int fontSize,
+            int height,
+            Color color)
         {
-            Title = "Product delivery roadmap";
-            FontSize = 57;
-            Height = 100;
-            Color = FugroColors.QuantumBlue;
+            Title = title;
+            FontSize = fontSize;
+            Height = height;
+            Color = color;
         }
 
         public string Title

@@ -16,7 +16,8 @@ namespace RoadmapLogic
         /// <param name="project"></param>
         /// <param name="points"></param>
         /// <param name="font"></param>
-        /// <returns>Placard width.</returns>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public static void Draw(Image<Rgba32> image, Project project, PointF[] points, Font font, float width, float height)
         {
             var bg = new PathBuilder()
