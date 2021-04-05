@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace RoadmapLambda
 {
@@ -10,6 +11,7 @@ namespace RoadmapLambda
     {
         public string Team { get; set; }
 
+        [JsonPropertyName("start_date")]
         public string StartDate { get; set; }
 
         public IEnumerable<FunctionProject> Projects { get; set; }
