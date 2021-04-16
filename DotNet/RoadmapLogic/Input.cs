@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace RoadmapLogic
 {
@@ -13,13 +14,9 @@ namespace RoadmapLogic
                 StartDate = date;
                 Projects = projects;
 
-                foreach (var project in projects)
+                if (projects.Any(p => !p.IsValid))
                 {
-                    if (project.IsValid == false)
-                    {
-                        IsValid = false;
-                        break;
-                    }
+                    IsValid = false;
                 }
             }
             else

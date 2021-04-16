@@ -6,7 +6,6 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace RoadmapLogic
 {
@@ -71,7 +70,7 @@ namespace RoadmapLogic
         {
             IPath chevronPath;
             Color[] chevronColors = {
-                FugroColors.WhatColorIsThisBlue,
+                FugroColors.PulseBlue03,
                 FugroColors.StrataTurquoise,
                 FugroColors.MotionGreen,
                 FugroColors.CosmicSand
