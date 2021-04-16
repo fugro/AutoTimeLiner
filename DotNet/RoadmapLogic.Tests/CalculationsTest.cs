@@ -38,7 +38,7 @@ namespace RoadmapLogic.Tests
         {
             Settings settings = new Settings(378, 366, new Margin(0, 0), 485, 50, 23, 4, 50, 32,
                                             new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20,
-                                            16, 38, "Product delivery roadmap", 57, 100, FugroColors.QuantumBlue,
+                                            16, 38, "Product delivery roadmap", 57, 100, DefaultColors.QuantumBlue,
                                             string.Empty, string.Empty, string.Empty);
 
             List<Quarter> quarters = Quarter.GetQuarters(new DateTime(2020, 3, 1));

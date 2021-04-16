@@ -40,7 +40,7 @@ namespace RoadmapLogic
                     Quarter.DrawQuarters(image, settings, quarters, fonts.QuarterFont);
 
                     image.DrawImage(
-                        settings.FugroLogoQuantumBlueBase64,
+                        settings.CopmanyLogo,
                         new Point(settings.ImageWidth - 224, settings.ImageHeight - 86),
                         1);
 
@@ -186,7 +186,7 @@ namespace RoadmapLogic
         private static void DrawShortLine(Image<Rgba32> image, Settings settings)
         {
             image.DrawLine(
-            FugroColors.QuantumBlue,
+            DefaultColors.QuantumBlue,
             3.3f,
             new PointF[] { new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25),
                 new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)});

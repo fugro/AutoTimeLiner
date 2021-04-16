@@ -2,7 +2,7 @@
 
 namespace RoadmapLogic
 {
-    public static class FugroColors
+    public static class DefaultColors
     {
         public static Color QuantumBlue = Color.FromRgb(1, 30, 65);
         public static Color GravityGrey = Color.FromRgb(217, 216, 214);
