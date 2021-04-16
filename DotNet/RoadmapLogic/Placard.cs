@@ -41,10 +41,7 @@ namespace RoadmapLogic
                 index++;
             }
 
-            if (!string.IsNullOrWhiteSpace(project.Date))
-            {
-                DrawText(image, project.Date, points[index], font);
-            }
+            DrawText(image, project.Date.ToString("dd MMM yyyy"), points[index], font); // ToDo: Make available through settings?
         }
 
         private static void DrawText(Image<Rgba32> image, string text, PointF point, Font font)

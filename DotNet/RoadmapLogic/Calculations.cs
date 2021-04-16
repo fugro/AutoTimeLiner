@@ -6,17 +6,9 @@ namespace RoadmapLogic
 {
     public static class Calculations
     {
-        public static int GetJulianDay(string date)
+        public static int GetJulianDay(DateTime date)
         {
-            string format = "M/d/yyyy";
-            if (DateTime.TryParseExact(date, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime decodedDate))
-            {
-                return (int)(decodedDate - new DateTime(decodedDate.Year, 1, 1)).TotalDays + 1;
-            }
-            else
-            {
-                return -1;
-            }
+            return (int)(date - new DateTime(date.Year, 1, 1)).TotalDays + 1;
         }
 
         public static Dictionary<int, float> JulianDayToPixel(Settings settings, List<Quarter> quarters)
@@ -58,20 +50,20 @@ namespace RoadmapLogic
             switch (quarter.Index)
             {
                 case 1:
-                    result = new Tuple<int, int>(GetJulianDay($"1/1/{quarter.Year}"), 
-                        GetJulianDay($"3/31/{quarter.Year}"));
+                    result = new Tuple<int, int>(GetJulianDay(new DateTime(quarter.Year,1,1)), 
+                        GetJulianDay(new DateTime(quarter.Year, 3, 31)));
                     break;
                 case 2:
-                    result = new Tuple<int, int>(GetJulianDay($"4/1/{quarter.Year}"), 
-                        GetJulianDay($"6/30/{quarter.Year}") - GetJulianDay($"3/31/{quarter.Year}"));
+                    result = new Tuple<int, int>(GetJulianDay(new DateTime(quarter.Year, 4, 1)), 
+                        GetJulianDay(new DateTime(quarter.Year, 6, 30)) - GetJulianDay(new DateTime(quarter.Year, 3, 31)));
                     break;
                 case 3:
-                    result = new Tuple<int, int>(GetJulianDay($"7/1/{quarter.Year}"), 
-                        GetJulianDay($"9/30/{quarter.Year}") - GetJulianDay($"6/30/{quarter.Year}"));
+                    result = new Tuple<int, int>(GetJulianDay(new DateTime(quarter.Year, 7, 1)), 
+                        GetJulianDay(new DateTime(quarter.Year, 9, 30)) - GetJulianDay(new DateTime(quarter.Year, 6, 30)));
                     break;
                 case 4:
-                    result = new Tuple<int, int>(GetJulianDay($"10/1/{quarter.Year}"), 
-                        GetJulianDay($"12/31/{quarter.Year}") - GetJulianDay($"9/30/{quarter.Year}"));
+                    result = new Tuple<int, int>(GetJulianDay(new DateTime(quarter.Year, 10, 1)), 
+                        GetJulianDay(new DateTime(quarter.Year, 12, 31)) - GetJulianDay(new DateTime(quarter.Year, 9, 30)));
                     break;
             }
             return result;

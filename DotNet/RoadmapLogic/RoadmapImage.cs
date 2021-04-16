@@ -1,13 +1,8 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Drawing;
-using SixLabors.ImageSharp.Drawing.Processing;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace RoadmapLogic
 {
@@ -16,28 +11,30 @@ namespace RoadmapLogic
         public static MemoryStream MakeImage(Input input, Settings settings)
         {
             var fonts = new Fonts(settings);
-
-            var teamText = string.IsNullOrWhiteSpace(input.Team) ? "[No team supplied]" : input.Team;
-
-            using (var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight))
+            
+            if (input.IsValid)
             {
-                // Draw short line just above image title
-                DrawShortLine(image, settings);
+                var teamText = string.IsNullOrWhiteSpace(input.Team) ? "[No team supplied]" : input.Team;
 
-                image.DrawText(
-                    settings.Heading.Title,
-                    fonts.HeaderFont,
-                    settings.Heading.Color,
-                    new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));
-
-                image.DrawText(
-                    teamText,
-                    fonts.TeamFont,
-                    Color.Black,
-                    new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
-
-                if (Quarter.GetQuarters(input.StartDate, out List<Quarter> quarters))
+                using (var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight))
                 {
+                    // Draw short line just above image title
+                    DrawShortLine(image, settings);
+
+                    image.DrawText(
+                        settings.Heading.Title,
+                        fonts.HeaderFont,
+                        settings.Heading.Color,
+                        new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));
+
+                    image.DrawText(
+                        teamText,
+                        fonts.TeamFont,
+                        Color.Black,
+                        new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
+
+                    List<Quarter> quarters = Quarter.GetQuarters(input.StartDate);
+
                     DrawLegsAndPlacards(input, settings, fonts, image, quarters);
 
                     Quarter.DrawQuarters(image, settings, quarters, fonts.QuarterFont);
@@ -46,12 +43,29 @@ namespace RoadmapLogic
                         settings.FugroLogoQuantumBlueBase64,
                         new Point(settings.ImageWidth - 224, settings.ImageHeight - 86),
                         1);
-                }
 
-                using (var ms = new MemoryStream())
+                    using (var ms = new MemoryStream())
+                    {
+                        image.SaveAsPng(ms);
+                        return ms;
+                    }
+                }
+            }
+            else
+            {
+                using (var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight))
                 {
-                    image.SaveAsPng(ms);
-                    return ms;
+                    image.DrawText(
+                        "Failed! Provided Json is Not Valid!\nPlease review input and retry.",
+                        fonts.HeaderFont,
+                        settings.Heading.Color,
+                        new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));
+
+                    using (var ms = new MemoryStream())
+                    {
+                        image.SaveAsPng(ms);
+                        return ms;
+                    }
                 }
             }
         }

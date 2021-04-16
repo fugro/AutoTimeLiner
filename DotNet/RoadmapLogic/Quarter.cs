@@ -25,53 +25,46 @@ namespace RoadmapLogic
             Index = index;
         }
 
-        public static bool GetQuarters(string startDay, out List<Quarter> quarters)
+        public static List<Quarter> GetQuarters(DateTime startDay)
         {
-            quarters = new List<Quarter>();
-            string format = "M/d/yyyy";
-            if (DateTime.TryParseExact(startDay, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
+            List<Quarter> quarters = new List<Quarter>();
+            int quarter;
+            int year = startDay.Year;
+            
+            if (startDay.Month < 4)
             {
-                int year = date.Year;
-                int month = date.Month;
-                int quarter;
-                if (month < 4)
-                {
-                    quarter = 1;
-                }
-                else if (month < 7)
-                {
-                    quarter = 2;
-                }
-                else if (month < 10)
-                {
-                    quarter = 3;
-                }
-                else
-                {
-                    quarter = 4;
-                }
-                quarters.Add(new Quarter(year, quarter));
-
-                for (int i = 1; i < 4; i++)
-                {
-                    if (quarter == 4)
-                    {
-                        year++;
-                        quarter = 1;
-                    }
-                    else
-                    {
-                        quarter++;
-                    }
-                    quarters.Add(new Quarter(year, quarter));
-                }
-
-                return true;
+                quarter = 1;
+            }
+            else if (startDay.Month < 7)
+            {
+                quarter = 2;
+            }
+            else if (startDay.Month < 10)
+            {
+                quarter = 3;
             }
             else
             {
-                return false;
+                quarter = 4;
             }
+
+            quarters.Add(new Quarter(year, quarter));
+
+            for (int i = 1; i < 4; i++)
+            {
+                if (quarter == 4)
+                {
+                    year++;
+                    quarter = 1;
+                }
+                else
+                {
+                    quarter++;
+                }
+                quarters.Add(new Quarter(year, quarter));
+            }
+
+            return quarters;
         }
 
         public static void DrawQuarters(Image<Rgba32> image, Settings settings, List<Quarter> quarters, Font chevronFont)

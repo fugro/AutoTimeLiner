@@ -37,6 +37,25 @@ namespace RoadmapLogic.Tests
             {
                 new Project(string.Empty, "Status", "2/22/2020"),
                 new Project("Task 3 - Description", string.Empty, "1/25/2021"),
+                new Project(string.Empty, string.Empty, "4/26/2021"),
+            };
+
+            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects);
+
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+
+            var bytes = imageStream.ToArray();
+
+            File.WriteAllBytes($"missingNameAndValue-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+        }
+
+        [TestMethod]
+        public void CreateAndSaveImageWithEmptyDateValuesShouldReturnError()
+        {
+            var Projects = new List<Project>
+            {
+                new Project(string.Empty, "Status", "2/22/2020"),
+                new Project("Task 3 - Description", string.Empty, "1/25/2021"),
                 new Project("Task 5 - Description", "Status", string.Empty),
                 new Project("Task 1 - Description", string.Empty, string.Empty),
                 new Project(string.Empty, string.Empty, "4/26/2021"),
@@ -49,7 +68,7 @@ namespace RoadmapLogic.Tests
 
             var bytes = imageStream.ToArray();
 
-            File.WriteAllBytes($"missingdata-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+            File.WriteAllBytes($"missingDate-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
         }
 
         [TestMethod]
