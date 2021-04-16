@@ -22,13 +22,32 @@
         }
         
         function onFileReaderLoad(event) {
+            document.getElementById('inputText').value = event.target.result;
+
+            validateJson(event.target.result);
+        }
+
+        function validateJson(jsonString) {
+            if (!jsonString) {
+                document.getElementById('loading').innerHTML = '<p class="error">Need JSON to generate an image!</p>';
+                return;
+            }
+
             try {
-                const obj = JSON.parse(event.target.result);
-                callAPI(obj);
+                return JSON.parse(jsonString);
             }
             catch {
                 document.getElementById('loading').innerHTML = '<p class="error">Invalid JSON.</p>';
             }
+        }
+
+        function runUsingJsonFromTextArea() {
+            run(document.getElementById('inputText').value);
+        }
+
+        function run(jsonString) {
+            const obj = validateJson(jsonString);
+            callAPI(validateJson(jsonString));
         }
 
         let timer;
@@ -99,52 +118,63 @@
         function uploadFile() {
             parseInputFile();
         }
+
+        function saveToFile() {
+            const obj = validateJson(document.getElementById('inputText').value);
+            downloadToFile(
+                document.getElementById('inputText').value,
+                (obj.team || 'roadmap_input') + '.json',
+                'application/json'
+            );
+        }
+
+        // Borrowed from https://robkendal.co.uk/blog/2020-04-17-saving-text-to-client-side-file-using-vanilla-js
+        function downloadToFile(content, filename, contentType) {
+            const a = document.createElement('a');
+            const file = new Blob([content], {type: contentType});
+
+            a.href= URL.createObjectURL(file);
+            a.download = filename;
+            a.click();
+
+            URL.revokeObjectURL(a.href);
+        }
     </script>
 </head>
 <body>
     <header style="display: flex; flex-direction: row;">
-        <h1>Fugro Roadmap Generator (beta)</h1>
+        <h1>
+            <span class="companyName"></span> Roadmap Generator (beta)
+        </h1>
         <div style="flex: 1"></div>
         <div>
             <a href="#" id="btn-logout" class="hidden" disabled="true" onclick="logout()">Log out</a>
             <div id="my-profile" style="margin-top: 3px"></div>
         </div>
     </header>
-    <div id="public-content">
-        <p id="authenticating"></p>
-        <p id="instructions" class="hidden">
-            <a href="#" id="btn-login" disabled="true" onclick="login()">Log in</a>
-            using Fugro SSO to generate a roadmap.
-        </p>
-    </div>
-    <div class="hidden" id="gated-content">
-        <p>
-            Upload a .json file formatted like so:
-        </p>
-        <code>
-            {<br />
-            &nbsp;&nbsp;"team": "Your Team Name",<br />
-            &nbsp;&nbsp;"start_date": "01/01/2021",<br />
-            &nbsp;&nbsp;"projects": [<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;{<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": "Build Product",<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label": "Ongoing",<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"date": "01/01/2021"<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;},<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;{<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"name": "Test Product",<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"label": "Not Started",<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"date": "6/01/2021"<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;}<br />
-            &nbsp;&nbsp;]<br />
-            }
-        </code>
-        <form style="margin-top:20px">
-            <input id="inputFile" type="file" onchange="uploadFile()" />
-        </form>
+    <div id="all-content">
+        <div id="public-content">
+            <p id="authenticating"></p>
+            <p id="instructions" class="hidden">
+                <a href="#" id="btn-login" disabled="true" onclick="login()">Log in</a>
+                using <span class="companyName"></span> SSO to generate a roadmap.
+            </p>
+        </div>
+        <div class="hidden" id="gated-content">
+            <p>
+                Edit the JSON, or upload your own file.
+            </p>
+            <form style="margin-top:20px">
+                <input id="inputFile" type="file" onchange="uploadFile()" style="margin-bottom: 10px" />
+                <textarea id="inputText" style="min-width: 100%; height: 500px"></textarea>
+                <button type="button" class="primary" onclick="saveToFile()">Save JSON to file</button>
+                <button type="button" class="primary" onclick="runUsingJsonFromTextArea()">Generate Roadmap</button>
+                <button type="button" onclick="useSample()">Use sample JSON</button>
+            </form>
+        </div>
         <div id="loading"></div>
-        <div id="resultImage"></div>
     </div>
+    <div id="resultImage"></div>
     <script src="https://cdn.auth0.com/js/auth0-spa-js/1.13/auth0-spa-js.production.js"></script>
     <script src="js/app.js"></script>
 </body>
