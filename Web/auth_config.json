@@ -2,5 +2,6 @@
     "domain": "<domain>",
     "clientId": "<clientId>",
     "audience": "<audience>",
-    "apiUrl": "<apiUrl>"
+    "apiUrl": "<apiUrl>",
+    "company": "<your_company_here>"
 }
