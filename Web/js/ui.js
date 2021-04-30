@@ -136,4 +136,4 @@ function downloadToFile(content, filename, contentType) {
     URL.revokeObjectURL(a.href);
 }
 
-document.getElementById('inputText').addEventListener('input', loadingMessage.clear());
+document.getElementById('inputText').addEventListener('input', () => loadingMessage.clear());
