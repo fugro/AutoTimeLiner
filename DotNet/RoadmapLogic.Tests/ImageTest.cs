@@ -21,13 +21,11 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "6/21/2021")
             };
 
-            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects);
+            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
-
             var bytes = imageStream.ToArray();
-
-            File.WriteAllBytes($"test-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+            WriteBytesToTimestampedFile("test", bytes);
         }
 
         [TestMethod]
@@ -40,13 +38,11 @@ namespace RoadmapLogic.Tests
                 new Project(string.Empty, string.Empty, "4/26/2021"),
             };
 
-            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects);
+            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
-
             var bytes = imageStream.ToArray();
-
-            File.WriteAllBytes($"missingNameAndValue-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+            WriteBytesToTimestampedFile("test-missingNameAndValue", bytes);
         }
 
         [TestMethod]
@@ -62,13 +58,11 @@ namespace RoadmapLogic.Tests
                 new Project(string.Empty, "Status", string.Empty)
             };
 
-            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects);
+            Input input = new Input("Enter TeamName Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
-
             var bytes = imageStream.ToArray();
-
-            File.WriteAllBytes($"missingDate-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+            WriteBytesToTimestampedFile("test-missingDate", bytes);
         }
 
         [TestMethod]
@@ -115,13 +109,11 @@ namespace RoadmapLogic.Tests
                 new Project("Task 37, This is the", "description that will", "12/31/2021"),
             };
 
-            Input input = new Input("Truncated Placard Test:", "01/01/2021", Projects);
+            Input input = new Input("Truncated Placard Test:", "01/01/2021", Projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
-            
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);            
             var bytes = imageStream.ToArray();
-
-            File.WriteAllBytes($"truncated-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+            WriteBytesToTimestampedFile("test-truncated", bytes);
         }
 
         [TestMethod]
@@ -138,6 +130,11 @@ namespace RoadmapLogic.Tests
             var saveTo = Path.Combine(pathUpToFilename, txtFile);
 
             File.WriteAllText(saveTo, new Base64Converter().ToBase64(imageFile));
+        }
+
+        private void WriteBytesToTimestampedFile(string filenamePart, byte[] bytes)
+        {
+            File.WriteAllBytes($"{filenamePart }-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
         }
     }
 }
