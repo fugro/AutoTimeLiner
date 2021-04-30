@@ -51,13 +51,13 @@ p {
 
 #public-content {
     margin-top: 50px;
-    margin-left:20px;
+    margin-left: 20px;
 }
 
 #gated-content {
     margin-left: 20px
 }
 
-p.error {
+.error {
     color: #E63519;
 }

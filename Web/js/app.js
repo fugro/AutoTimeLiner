@@ -98,24 +98,3 @@ const logout = () => {
         returnTo: window.location.origin
     });
 };
-
-function useSample() {
-    var thisYear = new Date().getFullYear();
-    const sample = {
-        'team': 'Your Team',
-        'start_date': '01/01/' + thisYear.toString(),
-        'projects': [
-            {
-                'name': 'Build Product',
-                'label': 'Ongoing',
-                'date': '01/01/' + thisYear.toString()
-            },
-            {
-                'name': 'Test Product',
-                'label': 'Not Started',
-                'date': '06/01/' + thisYear.toString()
-            }
-        ]
-    };
-    document.getElementById('inputText').value = JSON.stringify(sample, null, 4)
-}
