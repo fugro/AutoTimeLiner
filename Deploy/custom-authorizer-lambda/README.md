@@ -14,4 +14,4 @@ Upload this .zip to a Node.js AWS Lambda function. Test using the values in `eve
 
 # Logging In
 
-Followed https://auth0.com/docs/quickstart/spa/vanillajs/01-login to enable Fugro SSO (Single Sign-On). After a successful login, the app knows the access token to contact the roadmap-generation API.
+Followed https://auth0.com/docs/quickstart/spa/vanillajs/01-login to enable SSO (Single Sign-On). After a successful login, the app knows the access token to contact the roadmap-generation API.

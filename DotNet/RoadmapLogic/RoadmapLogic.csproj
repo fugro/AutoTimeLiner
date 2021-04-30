@@ -10,4 +10,12 @@
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta11" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if Exist $(ProjectDir)ReferenceFiles\CompanyLogo.tmp (&#xD;&#xA;move  $(ProjectDir)ReferenceFiles\CompanyLogo.cs $(ProjectDir)ReferenceFiles\CompanyLogo.bak&#xD;&#xA;move $(ProjectDir)ReferenceFiles\CompanyLogo.tmp $(ProjectDir)ReferenceFiles\CompanyLogo.cs&#xD;&#xA;)" />
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="if Exist $(ProjectDir)ReferenceFiles\CompanyLogo.bak (&#xD;&#xA;move  $(ProjectDir)ReferenceFiles\CompanyLogo.cs $(ProjectDir)ReferenceFiles\CompanyLogo.tmp&#xD;&#xA;move $(ProjectDir)ReferenceFiles\CompanyLogo.bak $(ProjectDir)ReferenceFiles\CompanyLogo.cs&#xD;&#xA;)" />
+  </Target>
+
 </Project>
