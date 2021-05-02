@@ -10,6 +10,11 @@ namespace RoadmapLogic
             return (int)(date - new DateTime(date.Year, 1, 1)).TotalDays + 1;
         }
 
+        public static int GetJulianDay(DateTime date, int startYear)
+        {
+            return (int)(date - new DateTime(startYear, 1, 1)).TotalDays + 1;
+        }
+
         public static Dictionary<int, float> JulianDayToPixel(Settings settings, IEnumerable<Quarter> quarters)
         {
             float chevronXStart = settings.Margin.Left;
