@@ -73,114 +73,134 @@ namespace RoadmapLogic
 
         private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, IEnumerable<Quarter> quarters)
         {
-            const string missingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
+            string missingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
             RendererOptions renderOptions = new RendererOptions(fonts.PlacardFont);
             bool hasMissingProjects = false;
-            
-            var positions = Calculations.JulianDayToPixel(settings, quarters);
-            var projects = Project.SortProjects(input.Projects, quarters.First());
-            Position position = Position.Top;
-            int index = 0;
-            var placardEndPixel = new float[,]
+
+            try
             {
+                if (!input.Projects.Any(p => quarters.Any(q => q.Equals(Quarter.GetQuarter(p.Date)))))
+                {
+                    missingProjectMessageText = $"Alert! No Project is within start date and '{quarters.Count()}' qaurters to report. Please Review.";
+                    hasMissingProjects = true;
+                    return;
+                }
+
+                var positions = Calculations.JulianDayToPixel(settings, quarters);
+                var projects = Project.SortProjects(input.Projects, quarters.First());
+                Position position = Position.Top;
+                int index = 0;
+                var placardEndPixel = new float[,]
+                {
                 { 0F, 0F, 0F },
                 { 0F, 0F, 0F }
-            };
-            float temp = 0F;
-            //bool addProject = true;
-            int count = 0;            
-            foreach (var project in projects)
-            {
-                if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
+                };
+                float temp = 0F;
+                //bool addProject = true;
+                int count = 0;
+                Quarter quarter;
+                foreach (var project in projects)
                 {
-                    if (index == 0)
+                    quarter = Quarter.GetQuarter(project.Date);
+                    if (!quarters.Any(q => q.Equals(quarter)))
                     {
-                        int i = index;
-                        for (; i < 2; i++)
+                        hasMissingProjects = true;
+                        continue;
+                    }
+
+                    if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
+                    {
+                        if (index == 0)
                         {
-                            if (xPos > placardEndPixel[(int)position, i])
+                            int i = index;
+                            for (; i < 2; i++)
                             {
-                                index = i;
-                                break;
+                                if (xPos > placardEndPixel[(int)position, i])
+                                {
+                                    index = i;
+                                    break;
+                                }
+                            }
+                            if (i == 2)
+                            {
+                                hasMissingProjects = true;
+                                continue;
                             }
                         }
-                        if (i == 2)
+
+
+                        var placardPoints = new PlacardLocation(xPos, index, settings, position).Points;
+
+
+                        float placardWidth = 0;
+                        foreach (var item in project.ToList())
                         {
-                            hasMissingProjects = true;
-                            continue;
-                        }
-                    }
-
-                    
-                    var placardPoints = new PlacardLocation(xPos, index, settings, position).Points;
-                    
-
-                    float placardWidth = 0;
-                    foreach (var item in project.ToList())
-                    {
-                        if (placardWidth < TextMeasurer.Measure(item, renderOptions).Width)
-                        {
-                            placardWidth = TextMeasurer.Measure(item, renderOptions).Width;
-                            temp = placardPoints[0].X + placardWidth;
-                        }
-                    }
-
-                    if (temp > placardEndPixel[(int)position, index])
-                    {
-                        placardEndPixel[(int)position, index] = temp;
-                    }
-
-                    // Draw DogLeg
-                    image.DrawLine(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points);
-
-                    if (temp > settings.ImageWidth)
-                    {
-                        placardPoints = new PlacardLocation(xPos, index, settings, position, true).Points;
-                    }
-
-                    if (count < 1)
-                    {
-                        // Draw Placard
-                        Placard.Draw(image, project, placardPoints, fonts.PlacardFont, temp, TextMeasurer.Measure("|", renderOptions).Height * 3);
-                    }
-
-                    if (index == 2)
-                    {
-                        if (placardEndPixel[(int)position, 1] < placardEndPixel[(int)position, index])
-                        {
-                            placardEndPixel[(int)position, 1] = placardEndPixel[(int)position, index];
+                            if (placardWidth < TextMeasurer.Measure(item, renderOptions).Width)
+                            {
+                                placardWidth = TextMeasurer.Measure(item, renderOptions).Width;
+                                temp = placardPoints[0].X + placardWidth;
+                            }
                         }
 
-                        if (placardEndPixel[(int)position, 0] < placardEndPixel[(int)position, index])
+                        if (temp > placardEndPixel[(int)position, index])
                         {
-                            placardEndPixel[(int)position, 0] = placardEndPixel[(int)position, index];
+                            placardEndPixel[(int)position, index] = temp;
                         }
 
-                        if (position == Position.Top)
+                        // Draw DogLeg
+                        image.DrawLine(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points);
+
+                        if (temp > settings.ImageWidth)
                         {
-                            position = Position.Bottom;
+                            placardPoints = new PlacardLocation(xPos, index, settings, position, true).Points;
+                        }
+
+                        if (count < 1)
+                        {
+                            // Draw Placard
+                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, temp, TextMeasurer.Measure("|", renderOptions).Height * 3);
+                        }
+
+                        if (index == 2)
+                        {
+                            if (placardEndPixel[(int)position, 1] < placardEndPixel[(int)position, index])
+                            {
+                                placardEndPixel[(int)position, 1] = placardEndPixel[(int)position, index];
+                            }
+
+                            if (placardEndPixel[(int)position, 0] < placardEndPixel[(int)position, index])
+                            {
+                                placardEndPixel[(int)position, 0] = placardEndPixel[(int)position, index];
+                            }
+
+                            if (position == Position.Top)
+                            {
+                                position = Position.Bottom;
+                            }
+                            else
+                            {
+                                position = Position.Top;
+                            }
+
+                            index = 0;
                         }
                         else
                         {
-                            position = Position.Top;
+                            index++;
                         }
-
-                        index = 0;
-                    }
-                    else
-                    {
-                        index++;
                     }
                 }
             }
-
-            if (hasMissingProjects)
+            finally
             {
-                image.DrawText(
-                    missingProjectMessageText,
-                    fonts.PlacardFont,
-                    Color.Red,
-                    new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(missingProjectMessageText, renderOptions).Height));
+                if (hasMissingProjects)
+                {
+                    image.DrawText(
+                        missingProjectMessageText,
+                        fonts.PlacardFont,
+                        Color.Red,
+                        new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(missingProjectMessageText, renderOptions).Height));
+                }
             }
         }
 

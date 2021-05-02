@@ -63,5 +63,15 @@ namespace RoadmapLogic.Tests
             Assert.AreEqual(1, julianDays.Item1);
             Assert.AreEqual(31 + 28 + 31, julianDays.Item2);
         }
+
+        [TestMethod]
+        public void CreateQuarterTest()
+        {
+            var startTime = new DateTime(2021, 1, 1);
+            var result = Quarter.GetQuarter(startTime);
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(new Quarter(2021, 1), result);
+        }
     }
 }
