@@ -1,9 +1,21 @@
+const fs = require("fs");
 const express = require("express");
 const { join } = require("path");
 const app = express();
 const jwt = require("express-jwt");
 const jwksRsa = require("jwks-rsa");
-const authConfig = require("./auth_config.json");
+var authConfig;
+
+try {
+  authConfig = require("./config.json");
+} catch (error) {
+  fs.copyFile("./defaults.json", "./config.json", (err) => {
+  if (err) {
+    console.log("Error Found:", err);
+  }
+});
+  authConfig = require("./config.json");
+}
 
 // Serve static assets from the /public folder
 //app.use(express.static(join(__dirname, "public")));
@@ -38,8 +50,8 @@ app.use(function(err, req, res, next) {
 });
 
 // Endpoint to serve the configuration file
-app.get("/auth_config.json", (req, res) => {
-  res.sendFile(join(__dirname, "auth_config.json"));
+app.get("/config.json", (req, res) => {
+  res.sendFile(join(__dirname, "config.json"));
 });
 
 // Serve the index page for all other requests

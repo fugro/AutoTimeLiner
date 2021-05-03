@@ -1,6 +1,6 @@
 let auth0 = null;
 
-const fetchAuthConfig = () => fetch('/auth_config.json');
+const fetchAuthConfig = () => fetch('/config.json');
 
 const configureClient = async () => {
     const response = await fetchAuthConfig();
@@ -14,7 +14,7 @@ const configureClient = async () => {
     window.apiUrl = config.apiUrl;
 
     document.getElementById('authenticating').innerHTML = (window.apiUrl.indexOf('<') > -1)
-        ? 'Fill out auth_config.json with the correct values, then refresh.'
+        ? 'Fill out config.json with the correct values, then refresh.'
         : 'Verifying authentication for ' + window.apiUrl + '...';
 
     auth0 = await createAuth0Client({
