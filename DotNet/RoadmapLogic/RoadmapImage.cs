@@ -3,6 +3,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace RoadmapLogic
 {
@@ -33,7 +34,7 @@ namespace RoadmapLogic
                         Color.Black,
                         new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
 
-                    List<Quarter> quarters = Quarter.GetQuarters(input.StartDate);
+                    var quarters = Quarter.GetQuarters(input.StartDate, input.Quarters);
 
                     DrawLegsAndPlacards(input, settings, fonts, image, quarters);
 
@@ -70,14 +71,14 @@ namespace RoadmapLogic
             }
         }
 
-        private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, List<Quarter> quarters)
+        private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, IEnumerable<Quarter> quarters)
         {
             const string missingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
             RendererOptions renderOptions = new RendererOptions(fonts.PlacardFont);
             bool hasMissingProjects = false;
             
             var positions = Calculations.JulianDayToPixel(settings, quarters);
-            var projects = Project.SortProjects(input.Projects, quarters[0]);
+            var projects = Project.SortProjects(input.Projects, quarters.First());
             Position position = Position.Top;
             int index = 0;
             var placardEndPixel = new float[,]

@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 
 namespace RoadmapLogic.Tests
 {
@@ -10,7 +9,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void GetQuartersTest()
         {
-            List<Quarter> quarters = Quarter.GetQuarters(new DateTime(2020, 7, 15));
+            var quarters = Quarter.GetQuarters(new DateTime(2020, 7, 15));
             
             Assert.AreEqual(2020, quarters[0].Year);
             Assert.AreEqual(3, quarters[0].Index);
@@ -41,7 +40,7 @@ namespace RoadmapLogic.Tests
                                             16, 38, "Product delivery roadmap", 57, 100, DefaultColors.QuantumBlue,
                                             string.Empty, string.Empty, string.Empty);
 
-            List<Quarter> quarters = Quarter.GetQuarters(new DateTime(2020, 3, 1));
+            var quarters = Quarter.GetQuarters(new DateTime(2020, 3, 1));
 
             Assert.AreEqual(366, Calculations.JulianDayToPixel(settings, quarters).Values.Count);
             

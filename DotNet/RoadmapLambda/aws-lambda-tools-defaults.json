@@ -11,7 +11,7 @@
     "configuration" : "Debug",
     "framework"     : "netcoreapp3.1",
     "function-runtime" : "dotnetcore3.1",
-    "function-memory-size" : 128,
+    "function-memory-size" : 1024,
     "function-timeout"     : 30,
     "function-handler"     : "RoadmapLambda::RoadmapLambda.Function::FunctionHandler",
     "function-name"        : "rdamt-roadmap-generator-test",

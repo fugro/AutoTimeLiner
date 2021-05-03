@@ -3,6 +3,7 @@ const useSample = () => {
     const sample = {
         'team': 'Your Team',
         'start_date': '01/01/' + thisYear.toString(),
+        'quarters': 4,
         'projects': [
             {
                 'name': 'Build Product',
