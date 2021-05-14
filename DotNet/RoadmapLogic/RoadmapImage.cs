@@ -1,6 +1,7 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,11 @@ namespace RoadmapLogic
 {
     public static class RoadmapImage
     {
+        private const string  s_MissingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
+        private const string  s_BeforeStartQuarterMessage = "Project(s) before start quarter was(re) omitted.";
+        private const string  s_AfterLastQuarterMessage = "Project(s) after last quarter was(re) omitted.";
+        private const string s_OutsideQuarterRangeMessage = "Projects before start and after last quarters were omitted.";
+
         public static MemoryStream MakeImage(Input input, Settings settings)
         {
             var fonts = new Fonts(settings);
@@ -73,16 +79,18 @@ namespace RoadmapLogic
 
         private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, IEnumerable<Quarter> quarters)
         {
-            string missingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
+            var noProjectWithinQuartersMessage = string.Empty;
+
             RendererOptions renderOptions = new RendererOptions(fonts.PlacardFont);
-            bool hasMissingProjects = false;
+            var hasMissingProjects = false;
+            var hasProjectBeforeStartQuarter = false;
+            var hasProjectAfterLastQuarter = false;
 
             try
             {
                 if (!input.Projects.Any(p => quarters.Any(q => q.Equals(Quarter.GetQuarter(p.Date)))))
                 {
-                    missingProjectMessageText = $"Alert! No Project is within start date and '{quarters.Count()}' quarters to report. Please Review.";
-                    hasMissingProjects = true;
+                    noProjectWithinQuartersMessage = $"Alert! No Project is within start date and '{quarters.Count()}' quarters to report. Please Review.";
                     return;
                 }
 
@@ -105,7 +113,14 @@ namespace RoadmapLogic
                     quarter = Quarter.GetQuarter(project.Date);
                     if (!quarters.Any(q => q.Equals(quarter)))
                     {
-                        hasMissingProjects = true;
+                        if (DateTime.Compare(project.Date, input.StartDate) < 0)
+                        {
+                            hasProjectBeforeStartQuarter = true;
+                        }
+                        else
+                        {
+                            hasProjectAfterLastQuarter = true;
+                        }
                         continue;
                     }
 
@@ -193,13 +208,15 @@ namespace RoadmapLogic
             }
             finally
             {
-                if (hasMissingProjects)
+                var message = BuildMessage(hasMissingProjects, hasProjectBeforeStartQuarter, hasProjectAfterLastQuarter);
+                var messagToWrite =  string.IsNullOrWhiteSpace(noProjectWithinQuartersMessage) ? message : $"{noProjectWithinQuartersMessage} {message}";
+                if (!string.IsNullOrWhiteSpace(messagToWrite))
                 {
                     image.DrawText(
-                        missingProjectMessageText,
+                        messagToWrite,
                         fonts.PlacardFont,
                         Color.Red,
-                        new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(missingProjectMessageText, renderOptions).Height));
+                        new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(messagToWrite, renderOptions).Height));
                 }
             }
         }
@@ -211,6 +228,35 @@ namespace RoadmapLogic
             3.3f,
             new PointF[] { new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25),
                 new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)});
+        }
+
+        private static string BuildMessage(bool hasMissingProjects, bool hasProjectBeforeStartQuarter, bool hasProjectAfterLastQuarter)
+        {
+            var message = string.Empty;
+
+            if (hasMissingProjects)
+            {
+                message = s_MissingProjectMessageText;
+            }
+
+            if (hasProjectBeforeStartQuarter && hasProjectAfterLastQuarter)
+            {
+                message =  string.IsNullOrWhiteSpace(message) ? s_OutsideQuarterRangeMessage : $"{message} {s_OutsideQuarterRangeMessage}";
+            }
+            else
+            {
+                if (hasProjectBeforeStartQuarter)
+                {
+                    message = string.IsNullOrWhiteSpace(message) ? s_BeforeStartQuarterMessage : $"{message} {s_BeforeStartQuarterMessage}";
+                }
+
+                if (hasProjectAfterLastQuarter)
+                {
+                    message = string.IsNullOrWhiteSpace(message) ? s_AfterLastQuarterMessage : $"{message} {s_AfterLastQuarterMessage}";
+                }
+            }
+
+            return message;
         }
     }
 }
