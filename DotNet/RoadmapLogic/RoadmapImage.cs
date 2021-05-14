@@ -81,7 +81,7 @@ namespace RoadmapLogic
             {
                 if (!input.Projects.Any(p => quarters.Any(q => q.Equals(Quarter.GetQuarter(p.Date)))))
                 {
-                    missingProjectMessageText = $"Alert! No Project is within start date and '{quarters.Count()}' qaurters to report. Please Review.";
+                    missingProjectMessageText = $"Alert! No Project is within start date and '{quarters.Count()}' quarters to report. Please Review.";
                     hasMissingProjects = true;
                     return;
                 }
@@ -92,11 +92,12 @@ namespace RoadmapLogic
                 int index = 0;
                 var placardEndPixel = new float[,]
                 {
-                { 0F, 0F, 0F },
-                { 0F, 0F, 0F }
+                    { 0F, 0F, 0F },
+                    { 0F, 0F, 0F }
                 };
+
                 float temp = 0F;
-                //bool addProject = true;
+
                 int count = 0;
                 Quarter quarter;
                 foreach (var project in projects)
@@ -121,6 +122,7 @@ namespace RoadmapLogic
                                     break;
                                 }
                             }
+
                             if (i == 2)
                             {
                                 hasMissingProjects = true;
@@ -128,11 +130,9 @@ namespace RoadmapLogic
                             }
                         }
 
-
                         var placardPoints = new PlacardLocation(xPos, index, settings, position).Points;
-
-
                         float placardWidth = 0;
+
                         foreach (var item in project.ToList())
                         {
                             if (placardWidth < TextMeasurer.Measure(item, renderOptions).Width)

@@ -29,7 +29,7 @@ namespace RoadmapLogic.Tests
         }
 
         [TestMethod]
-        public void CreateAndSaveImageWithPreviusQuarter()
+        public void CreateAndSaveImageWithPreviousQuarter()
         {
             var Projects = new List<Project>
             {
@@ -45,7 +45,7 @@ namespace RoadmapLogic.Tests
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
-            WriteBytesToTimestampedFile("test-PreviousQaurer", bytes);
+            WriteBytesToTimestampedFile("test-previousQuarter", bytes);
         }
 
         [TestMethod]
@@ -65,11 +65,11 @@ namespace RoadmapLogic.Tests
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
-            WriteBytesToTimestampedFile("test-nextQaurter", bytes);
+            WriteBytesToTimestampedFile("test-nextQuarter", bytes);
         }
 
         [TestMethod]
-        public void CreateAndSaveImageWitPreviousAndhNextQuarter()
+        public void CreateAndSaveImageWitPreviousAndNextQuarter()
         {
             var Projects = new List<Project>
             {
@@ -85,11 +85,11 @@ namespace RoadmapLogic.Tests
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
-            WriteBytesToTimestampedFile("test-previous-nextQaurter", bytes);
+            WriteBytesToTimestampedFile("test-previous-nextQuarter", bytes);
         }
 
         [TestMethod]
-        public void CreateAndSaveImageWithOutsideStarDateAndQuarters()
+        public void CreateAndSaveImageWithOutsideStartDateAndQuarters()
         {
             var Projects = new List<Project>
             {
@@ -105,7 +105,7 @@ namespace RoadmapLogic.Tests
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
-            WriteBytesToTimestampedFile("test-outsideStarDateAndQuarters", bytes);
+            WriteBytesToTimestampedFile("test-outsideStartDateAndQuarters", bytes);
         }
 
         [TestMethod]

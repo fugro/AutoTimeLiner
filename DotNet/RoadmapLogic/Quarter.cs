@@ -57,6 +57,7 @@ namespace RoadmapLogic
                 {
                     quarter++;
                 }
+
                 quarters.Add(new Quarter(year, quarter));
             }
 
@@ -107,6 +108,7 @@ namespace RoadmapLogic
 
             float xOffset = 210;
             const float yOffset = 464;
+
             foreach (var quarter in quarters)
             {
                 image.Mutate(x => x.DrawText(
@@ -127,6 +129,7 @@ namespace RoadmapLogic
         public Tuple<int, int> GetJulianDayRange()
         {
             var result = new Tuple<int, int>(-1, -1);
+
             switch (Index)
             {
                 case 1:
@@ -146,6 +149,7 @@ namespace RoadmapLogic
                         Calculations.GetJulianDay(new DateTime(Year, 12, 31)) - Calculations.GetJulianDay(new DateTime(Year, 9, 30)));
                     break;
             }
+
             return result;
         }
 

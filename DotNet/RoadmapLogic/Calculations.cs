@@ -26,6 +26,7 @@ namespace RoadmapLogic
                 var quarterData = quarter.GetJulianDayRange();
                 var start = quarterData.Item1;
                 float pixelInterval = settings.ChevronLength / (quarterData.Item2 - 1);
+
                 for (int i = 0; i < quarterData.Item2; i++)
                 {   
                     if (dict.Count == 363)
@@ -35,6 +36,7 @@ namespace RoadmapLogic
                     dict.Add(quarterData.Item1 + i, pixelIndex);
                     pixelIndex += pixelInterval;
                 }
+
                 chevronXStart = chevronXStart + settings.ChevronLength + settings.ChevronGap;
                 pixelIndex = chevronXStart;
             }            
