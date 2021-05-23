@@ -10,10 +10,14 @@ namespace RoadmapLogic
 {
     public static class RoadmapImage
     {
-        private const string  s_MissingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
-        private const string  s_BeforeStartQuarterMessage = "Project(s) before start quarter was(re) omitted.";
-        private const string  s_AfterLastQuarterMessage = "Project(s) after last quarter was(re) omitted.";
-        private const string s_OutsideQuarterRangeMessage = "Projects before start and after last quarters were omitted.";
+        private const string  s_MissingProjectMessage = "Alert! Projects have been omitted from the roadmap. Please Review.";
+        private const string  s_BeforeStartQuarterMessage = "Projects before start quarter were omitted.";
+        private const string  s_AfterLastQuarterMessage = "Projects after last quarter were omitted.";
+        private const string s_OutsideQuarterRangeMessage = "Projects before start and after last quarter were omitted.";
+
+        private const string s_MissingProjectKey = "MissingProject";
+        private const string s_BeforeStartQuarterKey = "BeforeStartQuarter";
+        private const string s_AfterLastQuarterKey = "AfterLastQuarter";
 
         public static MemoryStream MakeImage(Input input, Settings settings)
         {
@@ -82,9 +86,9 @@ namespace RoadmapLogic
             var noProjectWithinQuartersMessage = string.Empty;
 
             RendererOptions renderOptions = new RendererOptions(fonts.PlacardFont);
-            var hasMissingProjects = false;
-            var hasProjectBeforeStartQuarter = false;
-            var hasProjectAfterLastQuarter = false;
+            var missingProjectsMessage = string.Empty;
+            var beforeStartQuarterMessage = string.Empty;
+            var afterLastQuarterMessage = string.Empty;
 
             try
             {
@@ -111,15 +115,15 @@ namespace RoadmapLogic
                 foreach (var project in projects)
                 {
                     quarter = Quarter.GetQuarter(project.Date);
-                    if (!quarters.Any(q => q.Equals(quarter)))
+                    if (!quarters.Any(q => q.Equals(quarter)) && quarters.Count() == 4)
                     {
                         if (DateTime.Compare(project.Date, input.StartDate) < 0)
                         {
-                            hasProjectBeforeStartQuarter = true;
+                            beforeStartQuarterMessage = s_BeforeStartQuarterMessage;
                         }
                         else
                         {
-                            hasProjectAfterLastQuarter = true;
+                            afterLastQuarterMessage = s_AfterLastQuarterMessage;
                         }
                         continue;
                     }
@@ -140,7 +144,7 @@ namespace RoadmapLogic
 
                             if (i == 2)
                             {
-                                hasMissingProjects = true;
+                                missingProjectsMessage = s_MissingProjectMessage;
                                 continue;
                             }
                         }
@@ -208,7 +212,8 @@ namespace RoadmapLogic
             }
             finally
             {
-                var message = BuildMessage(hasMissingProjects, hasProjectBeforeStartQuarter, hasProjectAfterLastQuarter);
+                var messages = new Dictionary<string, string> { { s_MissingProjectKey, missingProjectsMessage }, { s_BeforeStartQuarterKey, beforeStartQuarterMessage }, { s_AfterLastQuarterKey, afterLastQuarterMessage } };
+                var message = BuildMessage(messages);
                 var messagToWrite =  string.IsNullOrWhiteSpace(noProjectWithinQuartersMessage) ? message : $"{noProjectWithinQuartersMessage} {message}";
                 if (!string.IsNullOrWhiteSpace(messagToWrite))
                 {
@@ -230,29 +235,24 @@ namespace RoadmapLogic
                 new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)});
         }
 
-        private static string BuildMessage(bool hasMissingProjects, bool hasProjectBeforeStartQuarter, bool hasProjectAfterLastQuarter)
+        private static string BuildMessage(IDictionary<string, string> messages)
         {
-            var message = string.Empty;
+            var message = messages[s_MissingProjectKey];
 
-            if (hasMissingProjects)
-            {
-                message = s_MissingProjectMessageText;
-            }
-
-            if (hasProjectBeforeStartQuarter && hasProjectAfterLastQuarter)
+            if (!string.IsNullOrWhiteSpace(messages[s_BeforeStartQuarterKey]) && !string.IsNullOrWhiteSpace(messages[s_AfterLastQuarterKey]))
             {
                 message =  string.IsNullOrWhiteSpace(message) ? s_OutsideQuarterRangeMessage : $"{message} {s_OutsideQuarterRangeMessage}";
             }
             else
             {
-                if (hasProjectBeforeStartQuarter)
+                if (!string.IsNullOrWhiteSpace(messages[s_BeforeStartQuarterKey]))
                 {
-                    message = string.IsNullOrWhiteSpace(message) ? s_BeforeStartQuarterMessage : $"{message} {s_BeforeStartQuarterMessage}";
+                    message = string.IsNullOrWhiteSpace(message) ? messages[s_BeforeStartQuarterKey] : $"{message} {messages[s_BeforeStartQuarterKey]}";
                 }
 
-                if (hasProjectAfterLastQuarter)
+                if (!string.IsNullOrWhiteSpace(messages[s_AfterLastQuarterKey]))
                 {
-                    message = string.IsNullOrWhiteSpace(message) ? s_AfterLastQuarterMessage : $"{message} {s_AfterLastQuarterMessage}";
+                    message = string.IsNullOrWhiteSpace(message) ? messages[s_AfterLastQuarterKey] : $"{message} {messages[s_AfterLastQuarterKey]}";
                 }
             }
 
