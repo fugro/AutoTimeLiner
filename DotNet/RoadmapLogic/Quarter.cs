@@ -27,7 +27,7 @@ namespace RoadmapLogic
             Index = index;
         }
 
-        public static IList<Quarter> GetQuarters(DateTime startDay, int? numberOfQuarters = QuartersDefault)
+        public static IList<Quarter> GetQuarters(DateTime startDate, int? numberOfQuarters = QuartersDefault)
         {
             var numQuarters = QuartersDefault;
             if (numberOfQuarters.HasValue)
@@ -40,29 +40,12 @@ namespace RoadmapLogic
                 }
             }
             
-            List<Quarter> quarters = new List<Quarter>();
-            int quarter;
-            int year = startDay.Year;
+            int year = startDate.Year;
+            var startQuarter = GetQuarter(startDate);
+            int quarter = startQuarter.Index;
+
+            List<Quarter> quarters = new List<Quarter> { startQuarter };
             
-            if (startDay.Month < 4)
-            {
-                quarter = 1;
-            }
-            else if (startDay.Month < 7)
-            {
-                quarter = 2;
-            }
-            else if (startDay.Month < 10)
-            {
-                quarter = 3;
-            }
-            else
-            {
-                quarter = 4;
-            }
-
-            quarters.Add(new Quarter(year, quarter));
-
             for (int i = 1; i < numQuarters; i++)
             {
                 if (quarter == 4)
@@ -74,10 +57,34 @@ namespace RoadmapLogic
                 {
                     quarter++;
                 }
+
                 quarters.Add(new Quarter(year, quarter));
             }
 
             return quarters;
+        }
+
+        public static Quarter GetQuarter(DateTime date)
+        {
+            int quarter;
+            if (date.Month < 4)
+            {
+                quarter = 1;
+            }
+            else if (date.Month < 7)
+            {
+                quarter = 2;
+            }
+            else if (date.Month < 10)
+            {
+                quarter = 3;
+            }
+            else
+            {
+                quarter = 4;
+            }
+
+            return new Quarter(date.Year, quarter);
         }
 
         public static void DrawQuarters(Image<Rgba32> image, Settings settings, IEnumerable<Quarter> quarters, Font chevronFont)
@@ -101,6 +108,7 @@ namespace RoadmapLogic
 
             float xOffset = 210;
             const float yOffset = 464;
+
             foreach (var quarter in quarters)
             {
                 image.Mutate(x => x.DrawText(
@@ -121,6 +129,7 @@ namespace RoadmapLogic
         public Tuple<int, int> GetJulianDayRange()
         {
             var result = new Tuple<int, int>(-1, -1);
+
             switch (Index)
             {
                 case 1:
@@ -140,6 +149,7 @@ namespace RoadmapLogic
                         Calculations.GetJulianDay(new DateTime(Year, 12, 31)) - Calculations.GetJulianDay(new DateTime(Year, 9, 30)));
                     break;
             }
+
             return result;
         }
 

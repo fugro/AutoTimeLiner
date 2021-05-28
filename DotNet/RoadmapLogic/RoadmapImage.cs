@@ -1,6 +1,7 @@
 ﻿using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,15 @@ namespace RoadmapLogic
 {
     public static class RoadmapImage
     {
+        private const string  s_MissingProjectMessage = "Alert! Projects have been omitted from the roadmap. Please Review.";
+        private const string  s_BeforeStartQuarterMessage = "Projects before start quarter were omitted.";
+        private const string  s_AfterLastQuarterMessage = "Projects after last quarter were omitted.";
+        private const string s_OutsideQuarterRangeMessage = "Projects before start and after last quarter were omitted.";
+
+        private const string s_MissingProjectKey = "MissingProject";
+        private const string s_BeforeStartQuarterKey = "BeforeStartQuarter";
+        private const string s_AfterLastQuarterKey = "AfterLastQuarter";
+
         public static MemoryStream MakeImage(Input input, Settings settings)
         {
             var fonts = new Fonts(settings);
@@ -73,114 +83,146 @@ namespace RoadmapLogic
 
         private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, IEnumerable<Quarter> quarters)
         {
-            const string missingProjectMessageText = "Alert! Project(s) have been omitted from the roadmap. Please Review.";
+            var noProjectWithinQuartersMessage = string.Empty;
+
             RendererOptions renderOptions = new RendererOptions(fonts.PlacardFont);
-            bool hasMissingProjects = false;
-            
-            var positions = Calculations.JulianDayToPixel(settings, quarters);
-            var projects = Project.SortProjects(input.Projects, quarters.First());
-            Position position = Position.Top;
-            int index = 0;
-            var placardEndPixel = new float[,]
+            var missingProjectsMessage = string.Empty;
+            var beforeStartQuarterMessage = string.Empty;
+            var afterLastQuarterMessage = string.Empty;
+
+            try
             {
-                { 0F, 0F, 0F },
-                { 0F, 0F, 0F }
-            };
-            float temp = 0F;
-            //bool addProject = true;
-            int count = 0;            
-            foreach (var project in projects)
-            {
-                if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
+                if (!input.Projects.Any(p => quarters.Any(q => q.Equals(Quarter.GetQuarter(p.Date)))))
                 {
-                    if (index == 0)
+                    noProjectWithinQuartersMessage = $"Alert! No Project is within start date and '{quarters.Count()}' quarters to report. Please Review.";
+                    return;
+                }
+
+                var positions = Calculations.JulianDayToPixel(settings, quarters);
+                var projects = Project.SortProjects(input.Projects, quarters.First());
+                Position position = Position.Top;
+                int index = 0;
+                var placardEndPixel = new float[,]
+                {
+                    { 0F, 0F, 0F },
+                    { 0F, 0F, 0F }
+                };
+
+                float temp = 0F;
+
+                int count = 0;
+                Quarter quarter;
+                foreach (var project in projects)
+                {
+                    quarter = Quarter.GetQuarter(project.Date);
+                    if (!quarters.Any(q => q.Equals(quarter)) && quarters.Count() == 4)
                     {
-                        int i = index;
-                        for (; i < 2; i++)
+                        if (DateTime.Compare(project.Date, input.StartDate) < 0)
                         {
-                            if (xPos > placardEndPixel[(int)position, i])
-                            {
-                                index = i;
-                                break;
-                            }
-                        }
-                        if (i == 2)
-                        {
-                            hasMissingProjects = true;
-                            continue;
-                        }
-                    }
-
-                    
-                    var placardPoints = new PlacardLocation(xPos, index, settings, position).Points;
-                    
-
-                    float placardWidth = 0;
-                    foreach (var item in project.ToList())
-                    {
-                        if (placardWidth < TextMeasurer.Measure(item, renderOptions).Width)
-                        {
-                            placardWidth = TextMeasurer.Measure(item, renderOptions).Width;
-                            temp = placardPoints[0].X + placardWidth;
-                        }
-                    }
-
-                    if (temp > placardEndPixel[(int)position, index])
-                    {
-                        placardEndPixel[(int)position, index] = temp;
-                    }
-
-                    // Draw DogLeg
-                    image.DrawLine(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points);
-
-                    if (temp > settings.ImageWidth)
-                    {
-                        placardPoints = new PlacardLocation(xPos, index, settings, position, true).Points;
-                    }
-
-                    if (count < 1)
-                    {
-                        // Draw Placard
-                        Placard.Draw(image, project, placardPoints, fonts.PlacardFont, temp, TextMeasurer.Measure("|", renderOptions).Height * 3);
-                    }
-
-                    if (index == 2)
-                    {
-                        if (placardEndPixel[(int)position, 1] < placardEndPixel[(int)position, index])
-                        {
-                            placardEndPixel[(int)position, 1] = placardEndPixel[(int)position, index];
-                        }
-
-                        if (placardEndPixel[(int)position, 0] < placardEndPixel[(int)position, index])
-                        {
-                            placardEndPixel[(int)position, 0] = placardEndPixel[(int)position, index];
-                        }
-
-                        if (position == Position.Top)
-                        {
-                            position = Position.Bottom;
+                            beforeStartQuarterMessage = s_BeforeStartQuarterMessage;
                         }
                         else
                         {
-                            position = Position.Top;
+                            afterLastQuarterMessage = s_AfterLastQuarterMessage;
+                        }
+                        continue;
+                    }
+
+                    if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
+                    {
+                        if (index == 0)
+                        {
+                            int i = index;
+                            for (; i < 2; i++)
+                            {
+                                if (xPos > placardEndPixel[(int)position, i])
+                                {
+                                    index = i;
+                                    break;
+                                }
+                            }
+
+                            if (i == 2)
+                            {
+                                missingProjectsMessage = s_MissingProjectMessage;
+                                continue;
+                            }
                         }
 
-                        index = 0;
-                    }
-                    else
-                    {
-                        index++;
+                        var placardPoints = new PlacardLocation(xPos, index, settings, position).Points;
+                        float placardWidth = 0;
+
+                        foreach (var item in project.ToList())
+                        {
+                            if (placardWidth < TextMeasurer.Measure(item, renderOptions).Width)
+                            {
+                                placardWidth = TextMeasurer.Measure(item, renderOptions).Width;
+                                temp = placardPoints[0].X + placardWidth;
+                            }
+                        }
+
+                        if (temp > placardEndPixel[(int)position, index])
+                        {
+                            placardEndPixel[(int)position, index] = temp;
+                        }
+
+                        // Draw DogLeg
+                        image.DrawLine(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points);
+
+                        if (temp > settings.ImageWidth)
+                        {
+                            placardPoints = new PlacardLocation(xPos, index, settings, position, true).Points;
+                        }
+
+                        if (count < 1)
+                        {
+                            // Draw Placard
+                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, temp, TextMeasurer.Measure("|", renderOptions).Height * 3);
+                        }
+
+                        if (index == 2)
+                        {
+                            if (placardEndPixel[(int)position, 1] < placardEndPixel[(int)position, index])
+                            {
+                                placardEndPixel[(int)position, 1] = placardEndPixel[(int)position, index];
+                            }
+
+                            if (placardEndPixel[(int)position, 0] < placardEndPixel[(int)position, index])
+                            {
+                                placardEndPixel[(int)position, 0] = placardEndPixel[(int)position, index];
+                            }
+
+                            if (position == Position.Top)
+                            {
+                                position = Position.Bottom;
+                            }
+                            else
+                            {
+                                position = Position.Top;
+                            }
+
+                            index = 0;
+                        }
+                        else
+                        {
+                            index++;
+                        }
                     }
                 }
             }
-
-            if (hasMissingProjects)
+            finally
             {
-                image.DrawText(
-                    missingProjectMessageText,
-                    fonts.PlacardFont,
-                    Color.Red,
-                    new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(missingProjectMessageText, renderOptions).Height));
+                var messages = new Dictionary<string, string> { { s_MissingProjectKey, missingProjectsMessage }, { s_BeforeStartQuarterKey, beforeStartQuarterMessage }, { s_AfterLastQuarterKey, afterLastQuarterMessage } };
+                var message = BuildMessage(messages);
+                var messagToWrite =  string.IsNullOrWhiteSpace(noProjectWithinQuartersMessage) ? message : $"{noProjectWithinQuartersMessage} {message}";
+                if (!string.IsNullOrWhiteSpace(messagToWrite))
+                {
+                    image.DrawText(
+                        messagToWrite,
+                        fonts.PlacardFont,
+                        Color.Red,
+                        new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(messagToWrite, renderOptions).Height));
+                }
             }
         }
 
@@ -191,6 +233,30 @@ namespace RoadmapLogic
             3.3f,
             new PointF[] { new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25),
                 new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)});
+        }
+
+        private static string BuildMessage(IDictionary<string, string> messages)
+        {
+            var message = messages[s_MissingProjectKey];
+
+            if (!string.IsNullOrWhiteSpace(messages[s_BeforeStartQuarterKey]) && !string.IsNullOrWhiteSpace(messages[s_AfterLastQuarterKey]))
+            {
+                message =  string.IsNullOrWhiteSpace(message) ? s_OutsideQuarterRangeMessage : $"{message} {s_OutsideQuarterRangeMessage}";
+            }
+            else
+            {
+                if (!string.IsNullOrWhiteSpace(messages[s_BeforeStartQuarterKey]))
+                {
+                    message = string.IsNullOrWhiteSpace(message) ? messages[s_BeforeStartQuarterKey] : $"{message} {messages[s_BeforeStartQuarterKey]}";
+                }
+
+                if (!string.IsNullOrWhiteSpace(messages[s_AfterLastQuarterKey]))
+                {
+                    message = string.IsNullOrWhiteSpace(message) ? messages[s_AfterLastQuarterKey] : $"{message} {messages[s_AfterLastQuarterKey]}";
+                }
+            }
+
+            return message;
         }
     }
 }
