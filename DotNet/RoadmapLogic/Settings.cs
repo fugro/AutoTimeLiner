@@ -64,7 +64,6 @@ namespace RoadmapLogic
             ChevronHeight = chevronHeight;
             ChevronOffset = chevronOffset;
             ChevronGap = chevronGap;
-            ChevronLength = ((ImageWidth - Margin.Left - Margin.Right - ChevronOffset) - (3 * ChevronGap)) / 4F;
             DogLegWidth = dogLegWidth;
             TeamFontSize = teamFontSize;
             PlotHeight = ImageHeight - Margin.Bottom - MidPoint - (ChevronHeight / 2);
@@ -79,8 +78,8 @@ namespace RoadmapLogic
             CopmanyLogo = !string.IsNullOrWhiteSpace(companyLogo) ? companyLogo : s_CompanyLogo;
         }
 
-        public static Settings Default => new Settings(1486, 839, new Margin(103, 70), 485, 50, 25, 4, 30, 32,
-            new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20, 16, 36,
+        public static Settings Default => new Settings(1486, 839, new Margin(20, 70), 485, 50, 25, 4, 30, 32,
+            new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20, 12, 36,
             "Product delivery roadmap", 57, 100, DefaultColors.QuantumBlue,
             s_SegoeUiNormalBase64, s_SegoeUiBoldBase64, s_CompanyLogo);
 
@@ -125,6 +124,7 @@ namespace RoadmapLogic
         public float ChevronLength
         {
             get;
+            internal set;
         }
 
         public float DogLegWidth
@@ -170,6 +170,7 @@ namespace RoadmapLogic
         public int PlacardFontSize
         {
             get;
+            internal set;
         }
 
         public int QuarterFontSize

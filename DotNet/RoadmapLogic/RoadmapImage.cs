@@ -21,8 +21,15 @@ namespace RoadmapLogic
 
         public static MemoryStream MakeImage(Input input, Settings settings)
         {
+            var quarters = Quarter.GetQuarters(input.StartDate, input.Quarters);
+            // Reduce the font size as number of quarters increase to fit more projects in the image.
+            settings.PlacardFontSize = settings.PlacardFontSize - (quarters.Count - 1);
             var fonts = new Fonts(settings);
-            
+
+            // Increase quarter width as number of quarters decrease
+            settings.ChevronLength = (settings.ImageWidth - settings.Margin.Left - settings.Margin.Right - settings.ChevronOffset - 
+                                        ((quarters.Count - 1) * settings.ChevronGap)) / quarters.Count;
+
             if (input.IsValid)
             {
                 var teamText = string.IsNullOrWhiteSpace(input.Team) ? "[No team supplied]" : input.Team;
@@ -43,8 +50,6 @@ namespace RoadmapLogic
                         fonts.TeamFont,
                         Color.Black,
                         new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
-
-                    var quarters = Quarter.GetQuarters(input.StartDate, input.Quarters);
 
                     DrawLegsAndPlacards(input, settings, fonts, image, quarters);
 
