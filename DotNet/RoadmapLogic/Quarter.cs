@@ -106,18 +106,24 @@ namespace RoadmapLogic
                 chevronXStart += settings.ChevronLength + settings.ChevronGap;
             }
 
-            float xOffset = 210;
+            //float xOffset = 210;
+            RendererOptions renderOptions = new RendererOptions(chevronFont);
+            
             const float yOffset = 464;
 
-            foreach (var quarter in quarters)
+            for (int i = 0; i < quarters.Count(); i++)
             {
+                float xOffset = settings.Margin.Left +
+                    (settings.ChevronGap * i) +
+                    (settings.ChevronLength * i) +
+                    (settings.ChevronLength / 2) +
+                    (settings.ChevronOffset / 2) -
+                    (TextMeasurer.Measure(quarters.ElementAt(i).ToString(), renderOptions).Width / 2);
                 image.Mutate(x => x.DrawText(
-                    quarter.ToString(),
+                    quarters.ElementAt(i).ToString(),
                     chevronFont,
                     Color.White,
                     new PointF(xOffset, yOffset)));
-
-                xOffset += settings.ChevronLength;
             }
         }
 
