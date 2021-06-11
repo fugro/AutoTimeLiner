@@ -79,7 +79,7 @@ namespace RoadmapLogic
         }
 
         public static Settings Default => new Settings(1486, 839, new Margin(20, 70), 485, 50, 25, 4, 30, 32,
-            new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20, 12, 36,
+            new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20, 16, 36,
             "Product delivery roadmap", 57, 100, DefaultColors.QuantumBlue,
             s_SegoeUiNormalBase64, s_SegoeUiBoldBase64, s_CompanyLogo);
 
