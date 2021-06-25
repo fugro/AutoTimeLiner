@@ -1,20 +1,31 @@
 html, body {
     padding: 0;
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', OpenSans, Tahoma, Geneva, Verdana, sans-serif;
+    color:rgb(1, 30, 65);
+    background-color: rgb(241, 239, 239);
 }
 
 button {
     border: 0;
-    border-radius: 4px;
-    padding: 7px;
+    border-radius: 6px;
+    padding: 10px 20px;
+    color: rgb(1, 30, 65);
+    border-color: rgb(1, 30, 65);
+    border-radius: 6px;
+    border-style: solid;
+    border-width: 1px;
 }
 button.primary {
-    background-color: #6EAED2;
-    border-color: #6EAED2;
+    background-color: rgb(1, 30, 65);
+    
+    color: rgb(255, 255, 255);
+    font-weight: bold;
 }
 button:hover {
-    cursor: pointer;
+    border-color: rgb(1, 30, 65);
+    background-color: rgb(255, 255, 255);
+    color: rgb(1, 30, 65);
 }
 
 a, a:visited {
@@ -31,7 +42,7 @@ label {
 }
 
 header {
-    background-color: #3D5F73;
+    background-color: rgb(1, 30, 65);
     color: #FFF;
     padding: 5px;
 }
@@ -44,20 +55,126 @@ p {
     font-size: larger;
 }
 
-#all-content {
-    max-width:600px;
-    margin: auto;
-}
-
 #public-content {
     margin-top: 50px;
     margin-left: 20px;
 }
 
 #gated-content {
-    margin-left: 20px
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 7px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+    padding: 30px;
 }
 
 .error {
     color: #E63519;
+}
+
+/* Additions for RDAMT-257 */
+
+.title {
+  font-size: 23pt;
+  font-weight: bold;
+}
+
+input[type=file] {
+  display: none;
+  background: rgb(255, 255, 255);
+  margin: 20px;
+}
+
+.custom-file-upload {
+  background-color: transparent;
+  border-color: rgb(var(--button-border-color));
+  border-radius: 6px;
+  border-style: solid;
+  border-width: 1px;
+  color: rgb(var(--text-color));
+  cursor: pointer;
+  display: inline-block;
+  font-family: Segoe UI, OpenSans, sans-serif;
+  font-size: 14px;
+  letter-spacing: .5px;
+  padding: 10px 20px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.custom-file-upload:hover {
+  text-decoration: none;
+  border-color: rgb(var(--button-border-color-hover));
+  background-color: rgb(255, 255, 255);
+  color: rgb(1, 30, 65);
+}
+
+.component {
+  background-color: rgb(241, 239, 239);
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+#resultImage {
+  margin-top: 20px;
+  max-width: 1024px;
+  background-color: rgb(255, 255, 255);
+}
+
+#inputText {
+  background-color: rgba(255,255,255,0.50);
+  border-radius: 6px;
+  border-width: 0;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
+  margin-bottom: 20px;
+  padding: 30px;
+}
+* {
+  box-sizing: border-box;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+[class*="col-"] {
+  float: left;
+  padding: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  [class*="col-"] {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  /* For tablets: */
+  .col-s-1 {width: 40%;}
+  .col-s-2 {width: 60%;}
+}
+
+/*@media only screen and (min-width: 768px) {
+  /* For desktop: *
+  .col-1 {width: 41.66%;}
+  .col-2 {width: 58.33%;}
+}*/
+
+/*@media only screen and (min-width: 900px) {
+  /* For desktop: *
+  .col-1 {width: 40%;}
+  .col-2 {width: 60%;}
+}*/
+
+@media only screen and (min-width: 1024px) {
+  /* For desktop: */
+  .col-1 {width: 50%;}
+  .col-2 {width: 50%;}
+}
+
+@media only screen and (min-width: 1200px) {
+  /* For desktop: */
+  .col-1 {width: 40%;}
+  .col-2 {width: 60%;}
 }
