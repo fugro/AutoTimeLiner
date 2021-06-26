@@ -45,6 +45,32 @@ namespace RoadmapLogic.Tests
         }
 
         [TestMethod]
+        public void CreateAndSaveImageWithSixQaurters()
+        {
+            var Projects = new List<Project>
+            {
+                new Project("Task 1 - Description", "Status", "12/22/2020"),
+                new Project("Task 3 - Description", "Status", "1/25/2021"),
+                new Project("Task 5 - Description", "Status", "12/28/2020"),
+                new Project("Task 1 - Description", "Status", "3/15/2021"),
+                new Project("Task 3 - Description", "Status", "4/26/2021"),
+                new Project("Task 5 - Description", "Status", "6/21/2021"),
+                new Project("Task 7 - Description", "Status", "9/20/2021"),
+                new Project("Task 5 - Description", "Status", "8/2/2021"),
+                new Project("Task 7 - Description", "Status", "11/5/2021"),
+                new Project("Task 9 - Description", "Status", "1/15/2022"),
+                new Project("Task 7 - Description", "Status", "12/18/2021"),
+                new Project("Task 9 - Description", "Status", "3/10/2022")
+            };
+
+            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 6);
+
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("test-sixQaurters", bytes);
+        }
+
+        [TestMethod]
         public void CreateAndSaveImageWithTwoQuarters()
         {
             var Projects = new List<Project>

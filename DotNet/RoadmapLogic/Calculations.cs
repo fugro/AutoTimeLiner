@@ -15,10 +15,10 @@ namespace RoadmapLogic
             return (int)(date - new DateTime(startYear, 1, 1)).TotalDays + 1;
         }
 
-        public static Dictionary<int, float> JulianDayToPixel(Settings settings, IEnumerable<Quarter> quarters)
+        public static Dictionary<Tuple<int, int>, float> JulianDayToPixel(Settings settings, IEnumerable<Quarter> quarters)
         {
             float chevronXStart = settings.Margin.Left;
-            var dict = new Dictionary<int, float>();
+            var dict = new Dictionary<Tuple<int, int>, float>();
             var pixelIndex = chevronXStart;
 
             foreach (var quarter in quarters)
@@ -33,7 +33,7 @@ namespace RoadmapLogic
                     {
                         Console.WriteLine("break");
                     }
-                    dict.Add(quarterData.Item1 + i, pixelIndex);
+                    dict.Add(new Tuple<int, int>(quarterData.Item1 + i, quarter.Year), pixelIndex);
                     pixelIndex += pixelInterval;
                 }
 

@@ -133,7 +133,7 @@ namespace RoadmapLogic
                         continue;
                     }
 
-                    if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
+                    if (positions.TryGetValue(new Tuple<int, int>(Calculations.GetJulianDay(project.Date), quarter.Year), out float xPos))
                     {
                         if (index == 0)
                         {
