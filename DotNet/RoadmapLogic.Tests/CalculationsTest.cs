@@ -42,11 +42,11 @@ namespace RoadmapLogic.Tests
 
             var quarters = Quarter.GetQuarters(new DateTime(2020, 3, 1));
 
-            Assert.AreEqual(366, Calculations.JulianDayToPixel(settings, quarters).Values.Count);
+            Assert.AreEqual(547, Calculations.JulianDayToPixel(settings, quarters).Values.Count);
             
             quarters = Quarter.GetQuarters(new DateTime(2021, 3, 1));
             
-            Assert.AreEqual(365, Calculations.JulianDayToPixel(settings, quarters).Values.Count);
+            Assert.AreEqual(546, Calculations.JulianDayToPixel(settings, quarters).Values.Count);
         }
     }
 }

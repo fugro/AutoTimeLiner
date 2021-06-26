@@ -11,5 +11,6 @@ namespace RoadmapLogic
         public static Color StrataTurquoise = Color.FromRgb(71, 156, 170);
         public static Color CosmicSand = Color.FromRgb(217, 190, 137);
         public static Color MotionGreen = Color.FromRgb(140, 182, 128);
+        public static Color MintGreen = Color.FromRgb(60, 100, 60);
     }
 }

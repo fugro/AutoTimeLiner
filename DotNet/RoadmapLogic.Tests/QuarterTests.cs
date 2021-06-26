@@ -13,7 +13,7 @@ namespace RoadmapLogic.Tests
             var startTime = new DateTime(2021, 1, 1);
             var result = Quarter.GetQuarters(startTime);
 
-            Assert.AreEqual(4, result.Count());
+            Assert.AreEqual(6, result.Count());
             Assert.AreEqual(new Quarter(2021, 1), result[0]);
             Assert.AreEqual(new Quarter(2021, 2), result[1]);
             Assert.AreEqual(new Quarter(2021, 3), result[2]);
@@ -45,13 +45,13 @@ namespace RoadmapLogic.Tests
         
         [DataTestMethod]
         [DataRow(-1)]
-        [DataRow(5)]
+        [DataRow(7)]
         public void CreatesFourQuartersGivenBadQuarterInput(int quarters)
         {
             var startTime = new DateTime(2021, 10, 1);
             var result = Quarter.GetQuarters(startTime, quarters);
 
-            Assert.AreEqual(4, result.Count());
+            Assert.AreEqual(6, result.Count());
         }
 
 

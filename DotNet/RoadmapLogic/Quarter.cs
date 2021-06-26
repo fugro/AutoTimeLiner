@@ -12,7 +12,7 @@ namespace RoadmapLogic
 {
     public class Quarter
     {
-        const int QuartersDefault = 4;
+        const int QuartersDefault = 6;
 
         public int Year { get; }
 
@@ -34,7 +34,7 @@ namespace RoadmapLogic
             {
                 numQuarters = numberOfQuarters.Value;
 
-                if (numQuarters < 1 || numQuarters > 4)
+                if (numQuarters < 1 || numQuarters > 6)
                 {
                     numQuarters = QuartersDefault;
                 }
@@ -94,7 +94,9 @@ namespace RoadmapLogic
                 DefaultColors.PulseBlue03,
                 DefaultColors.StrataTurquoise,
                 DefaultColors.MotionGreen,
-                DefaultColors.CosmicSand
+                DefaultColors.CosmicSand,
+                DefaultColors.PulseBlue,
+                DefaultColors.MintGreen
             };
 
             var chevronXStart = (float)settings.Margin.Left;

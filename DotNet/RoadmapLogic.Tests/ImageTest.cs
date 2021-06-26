@@ -45,6 +45,32 @@ namespace RoadmapLogic.Tests
         }
 
         [TestMethod]
+        public void CreateAndSaveImageWithSixQuarters()
+        {
+            var Projects = new List<Project>
+            {
+                new Project("Task 1 - Description", "Status", "12/22/2020"),
+                new Project("Task 3 - Description", "Status", "1/25/2021"),
+                new Project("Task 5 - Description", "Status", "12/28/2020"),
+                new Project("Task 1 - Description", "Status", "3/15/2021"),
+                new Project("Task 3 - Description", "Status", "4/26/2021"),
+                new Project("Task 5 - Description", "Status", "6/21/2021"),
+                new Project("Task 7 - Description", "Status", "9/20/2021"),
+                new Project("Task 5 - Description", "Status", "8/2/2021"),
+                new Project("Task 7 - Description", "Status", "11/5/2021"),
+                new Project("Task 9 - Description", "Status", "1/15/2022"),
+                new Project("Task 7 - Description", "Status", "12/18/2021"),
+                new Project("Task 9 - Description", "Status", "3/10/2022")
+            };
+
+            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 6);
+
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("test-sixQuarters", bytes);
+        }
+
+        [TestMethod]
         public void CreateAndSaveImageWithTwoQuarters()
         {
             var Projects = new List<Project>
@@ -242,34 +268,34 @@ namespace RoadmapLogic.Tests
                 new Project("Task 1, This description should be too long to be viewed", "Status", "1/1/2021"),
                 new Project("Task 2, This is a little long", "The status is unknown", "1/10/2021"),
                 new Project("Task 3, This is a little long", "Status", "1/20/2021"),
-                new Project("Task 4, This desciption is a medium long", "The status is unknown", "2/1/2021"),
+                new Project("Task 4, This description is a medium long", "The status is unknown", "2/1/2021"),
                 new Project("Task 5, This description should be too long to be viewed", "Status", "2/10/2021"),
-                new Project("Task 6, This desciption is a medium long", "Status", "2/20/2021"),
+                new Project("Task 6, This description is a medium long", "Status", "2/20/2021"),
                 new Project("Task 7, This is a little long", "The status is unknown", "3/1/2021"),
                 new Project("Task 8, This description should be too long to be viewed", "Status", "3/10/2021"),
-                new Project("Task 9, This desciption is a medium long", "Status", "3/20/2021"),
+                new Project("Task 9, This description is a medium long", "Status", "3/20/2021"),
                 new Project("Task 11, This is a little long, ", "Status", "4/10/2021"),
-                new Project("Task 12, This desciption is a medium long", "The status is unknown", "4/20/2021"),
+                new Project("Task 12, This description is a medium long", "The status is unknown", "4/20/2021"),
                 new Project("Task 13, This description should be too long to be viewed", "Status", "5/1/2021"),
-                new Project("Task 14, This desciption is a medium long", "The status is unknown", "5/10/2021"),
+                new Project("Task 14, This description is a medium long", "The status is unknown", "5/10/2021"),
                 new Project("Task 15, This is a little long", "Status", "5/20/2021"),
-                new Project("Task 16, This desciption is a medium long", "Status", "6/1/2021"),
-                new Project("Task 17, This desciption is a medium long", "The status is unknown", "6/10/2021"),
+                new Project("Task 16, This description is a medium long", "Status", "6/1/2021"),
+                new Project("Task 17, This description is a medium long", "The status is unknown", "6/10/2021"),
                 new Project("Task 18, This is a little long", "The status is unknown", "6/20/2021"),
                 new Project("Task 19, This description should be too long to be viewed", "Status", "7/1/2021"),
                 new Project("Task 20, This is a little long", "The status is unknown", "7/10/2021"),
                 new Project("Task 21, This description should be too long to be viewed", "Status", "7/20/2021"),
-                new Project("Task 22, This desciption is a medium long", "Status", "8/1/2021"),
+                new Project("Task 22, This description is a medium long", "Status", "8/1/2021"),
                 new Project("Task 23, This description should be too long to be viewed", "Status", "8/10/2021"),
                 new Project("Task 24, This is a little long", "Status", "8/20/2021"),
-                new Project("Task 25, This desciption is a medium long", "Status", "9/1/2021"),
+                new Project("Task 25, This description is a medium long", "Status", "9/1/2021"),
                 new Project("Task 26, This is a little long", "The status is unknown", "9/10/2021"),
                 new Project("Task 27, This description should be too long to be viewed", "Status", "9/20/2021"),
                 new Project("Task 28, This is a little long", "Status", "10/1/2021"),
-                new Project("Task 29, This desciption is a medium long", "The status is unknown", "10/10/2021"),
-                new Project("Task 30, This desciption is a medium long", "Status", "10/20/2021"),
+                new Project("Task 29, This description is a medium long", "The status is unknown", "10/10/2021"),
+                new Project("Task 30, This description is a medium long", "Status", "10/20/2021"),
                 new Project("Task 31, This is a little long", "Status", "11/1/2021"),
-                new Project("Task 33, This desciption is a medium long", "Status", "11/20/2021"),
+                new Project("Task 33, This description is a medium long", "Status", "11/20/2021"),
                 new Project("Task 34, This is a little long", "The status is unknown", "12/1/2021"),
                 new Project("Task 35, This description should be too long to be viewed", "Status", "12/10/2021"),
                 new Project("Task 36, This is a little long", "The status is unknown", "12/20/2021"),

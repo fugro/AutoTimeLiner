@@ -132,7 +132,7 @@ namespace RoadmapLogic
                         continue;
                     }
 
-                    if (positions.TryGetValue(Calculations.GetJulianDay(project.Date), out float xPos))
+                    if (positions.TryGetValue(new Tuple<int, int>(Calculations.GetJulianDay(project.Date), quarter.Year), out float xPos))
                     {
                         if (index == 0)
                         {
@@ -181,7 +181,15 @@ namespace RoadmapLogic
                         if (count < 1)
                         {
                             // Draw Placard
-                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, tempWidth, TextMeasurer.Measure("|", renderOptions).Height * 3);
+                            double padding = (quarters.Count() + 1) + (quarters.Count() % 2 == 0 ? .5D : .75D);
+                            double placardHeight = 0;
+                            placardHeight += TextMeasurer.Measure(project.Name, renderOptions).Height;
+                            placardHeight += padding;
+                            placardHeight += TextMeasurer.Measure(project.Label, renderOptions).Height;
+                            placardHeight += padding;
+                            placardHeight += TextMeasurer.Measure(project.Date.ToString("dd MMM yyyy"), renderOptions).Height;
+                            placardHeight += padding;
+                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, tempWidth, (float)placardHeight);
                         }
 
                         if (index == 2)
