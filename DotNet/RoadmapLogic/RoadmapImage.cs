@@ -113,8 +113,7 @@ namespace RoadmapLogic
                     { 0F, 0F, 0F }
                 };
 
-                float temp = 0F;
-
+                float tempWidth = 0F;
                 int count = 0;
                 Quarter quarter;
                 foreach (var project in projects)
@@ -162,19 +161,19 @@ namespace RoadmapLogic
                             if (placardWidth < TextMeasurer.Measure(item, renderOptions).Width)
                             {
                                 placardWidth = TextMeasurer.Measure(item, renderOptions).Width;
-                                temp = placardPoints[0].X + placardWidth;
+                                tempWidth = placardPoints[0].X + placardWidth;
                             }
                         }
 
-                        if (temp > placardEndPixel[(int)position, index])
+                        if (tempWidth > placardEndPixel[(int)position, index])
                         {
-                            placardEndPixel[(int)position, index] = temp;
+                            placardEndPixel[(int)position, index] = tempWidth;
                         }
 
                         // Draw DogLeg
                         image.DrawLine(Color.Black, 3, new DogLeg(xPos, index, settings, position).Points);
 
-                        if (temp > settings.ImageWidth)
+                        if (tempWidth > settings.ImageWidth)
                         {
                             placardPoints = new PlacardLocation(xPos, index, settings, position, true).Points;
                         }
@@ -182,7 +181,7 @@ namespace RoadmapLogic
                         if (count < 1)
                         {
                             // Draw Placard
-                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, temp, TextMeasurer.Measure("|", renderOptions).Height * 3);
+                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, tempWidth, TextMeasurer.Measure("|", renderOptions).Height * 3);
                         }
 
                         if (index == 2)
@@ -217,16 +216,23 @@ namespace RoadmapLogic
             }
             finally
             {
-                var messages = new Dictionary<string, string> { { s_MissingProjectKey, missingProjectsMessage }, { s_BeforeStartQuarterKey, beforeStartQuarterMessage }, { s_AfterLastQuarterKey, afterLastQuarterMessage } };
+                var messages = new Dictionary<string, string> {
+                    { s_MissingProjectKey, missingProjectsMessage },
+                    { s_BeforeStartQuarterKey, beforeStartQuarterMessage },
+                    { s_AfterLastQuarterKey, afterLastQuarterMessage }
+                };
                 var message = BuildMessage(messages);
-                var messagToWrite =  string.IsNullOrWhiteSpace(noProjectWithinQuartersMessage) ? message : $"{noProjectWithinQuartersMessage} {message}";
-                if (!string.IsNullOrWhiteSpace(messagToWrite))
+                var messageToWrite = string.IsNullOrWhiteSpace(noProjectWithinQuartersMessage)
+                    ? message
+                    : $"{noProjectWithinQuartersMessage} {message}";
+
+                if (!string.IsNullOrWhiteSpace(messageToWrite))
                 {
                     image.DrawText(
-                        messagToWrite,
+                        messageToWrite,
                         fonts.PlacardFont,
                         Color.Red,
-                        new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(messagToWrite, renderOptions).Height));
+                        new PointF(10F, settings.ImageHeight - TextMeasurer.Measure(messageToWrite, renderOptions).Height));
                 }
             }
         }
@@ -236,8 +242,10 @@ namespace RoadmapLogic
             image.DrawLine(
             DefaultColors.QuantumBlue,
             3.3f,
-            new PointF[] { new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25),
-                new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)});
+            new PointF[] {
+                new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25),
+                new PointF(settings.Margin.Left + 80, settings.Margin.Top - 25)
+            });
         }
 
         private static string BuildMessage(IDictionary<string, string> messages)

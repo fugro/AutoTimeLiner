@@ -1,4 +1,4 @@
-# Custom Authorizer
+# Custom Authorizer Lambda
 
 For all the gory details, see https://auth0.com/docs/integrations/aws-api-gateway-custom-authorizers#create-an-auth0-api.
 

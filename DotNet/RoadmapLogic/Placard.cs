@@ -12,12 +12,6 @@ namespace RoadmapLogic
         /// <summary>
         /// Draw Placard text to image.
         /// </summary>
-        /// <param name="image"></param>
-        /// <param name="project"></param>
-        /// <param name="points"></param>
-        /// <param name="font"></param>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
         public static void Draw(Image<Rgba32> image, Project project, PointF[] points, Font font, float width, float height)
         {
             var bg = new PathBuilder()
@@ -35,7 +29,7 @@ namespace RoadmapLogic
                 index++;
             }
 
-            if(!string.IsNullOrWhiteSpace(project.Label))
+            if (!string.IsNullOrWhiteSpace(project.Label))
             {
                 DrawText(image, project.Label, points[index], font);
                 index++;

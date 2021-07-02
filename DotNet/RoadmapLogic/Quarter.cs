@@ -106,8 +106,7 @@ namespace RoadmapLogic
                 chevronXStart += settings.ChevronLength + settings.ChevronGap;
             }
 
-            //float xOffset = 210;
-            RendererOptions renderOptions = new RendererOptions(chevronFont);
+            var renderOptions = new RendererOptions(chevronFont);
             
             const float yOffset = 464;
 
