@@ -8,9 +8,9 @@ Edit the `.env` file so that it points to your specific Auth0 settings. Go to yo
 
 Run `npm install`. Then run `npm test`. You should see a JSON-policy-looking-result with the text "Effect": "Allow" inside.
 
-Now you can zip up the required files to create a .zip for the lambda. On Linux, run `npm run bundle`. On Windows, use something else.
+Now you can zip up the files required for the lambda deployment: `.env`, `package.json`, and any `.js` files.
 
-Upload this .zip to a Node.js AWS Lambda function. Test using the values in `event.json`.
+Upload this .zip package to a Node.js AWS Lambda function. Test using the values in `event.json`.
 
 # Logging In
 
