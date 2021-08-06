@@ -7,31 +7,10 @@ namespace RoadmapLogic
         private static readonly string s_SegoeUiNormalBase64 = new SegoeUiNormal().Base64;
         private static readonly string s_SegoeUiBoldBase64 = new SegoeUiBold().Base64;
         private static readonly string s_CompanyLogo = new CompanyLogo().Base64;
+
         /// <summary>
         /// Settings for the Setup of the Generated image.
         /// </summary>
-        /// <param name="imageWidth"></param>
-        /// <param name="imageHeight"></param>
-        /// <param name="margin"></param>
-        /// <param name="midpoint"></param>
-        /// <param name="chevronHeight"></param>
-        /// <param name="chevronOffset"></param>
-        /// <param name="chevronGap"></param>
-        /// <param name="dogLegWidth"></param>
-        /// <param name="teamFontSize"></param>
-        /// <param name="topOffsets"></param>
-        /// <param name="bottomOffsets"></param>
-        /// <param name="placardXSpacing"></param>
-        /// <param name="placardYSpacing"></param>
-        /// <param name="placardFontSize"></param>
-        /// <param name="quarterFontSize"></param>
-        /// <param name="headingTitle"></param>
-        /// <param name="headingFontSize"></param>
-        /// <param name="headingHeight"></param>
-        /// <param name="headingColor"></param>
-        /// <param name="segoeUiNormalBase64"></param>
-        /// <param name="segoeUiBoldBase64"></param>
-        /// <param name="companyLogo"></param>
         public Settings(
             int imageWidth,
             int imageHeight,
