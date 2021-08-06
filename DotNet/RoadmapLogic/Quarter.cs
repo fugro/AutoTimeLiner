@@ -17,7 +17,7 @@ namespace RoadmapLogic
         public int Year { get; }
 
         /// <summary>
-        /// The number of this quarter from 1 to 4.
+        /// The number of this quarter from 1 to 6.
         /// </summary>
         public int Index { get; }
 
