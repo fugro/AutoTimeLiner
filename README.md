@@ -31,6 +31,7 @@ Older [Python](https://github.com/fugro/AutoTimeLiner/blob/main/AutoTimeLiner) c
 ```
 
 *start_date* - Defines the first calendar quarter to be used in the roadmap.
+
 *quarters* - Between 1 and 4 (optional; defaults to 4).
 
 All date values are accepted in a variety of formats:
@@ -38,4 +39,3 @@ All date values are accepted in a variety of formats:
 * `05 Sep 2021`
 * `09/05/2021`
 * `09-05-2021`
-etc...

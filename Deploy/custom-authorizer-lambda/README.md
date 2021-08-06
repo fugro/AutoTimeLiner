@@ -4,7 +4,7 @@ For all the gory details, see https://auth0.com/docs/integrations/aws-api-gatewa
 
 This provides the codebase for an AWS Lambda that validates a token against Auth0. The Lambda is meant to be used as a custom authorizer for an API Gateway.
 
-Edit the `.env` and file so that it points to your specific Auth0 settings. Go to your Auth0 API and generate a token. Put that token in the `event.json` file (after "Bearer ") and edit the `methodArn` to match the API Gateway method being secured.
+Edit the `.env` file so that it points to your specific Auth0 settings. Go to your Auth0 API and generate a token. Put that token in the `event.json` file (after "Bearer ") and edit the `methodArn` to match the API Gateway method being secured.
 
 Run `npm install`. Then run `npm test`. You should see a JSON-policy-looking-result with the text "Effect": "Allow" inside.
 
