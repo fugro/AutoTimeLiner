@@ -29,10 +29,6 @@ namespace RoadmapLogic
 
                 for (int i = 0; i < quarterData.Item2; i++)
                 {   
-                    if (dict.Count == 363)
-                    {
-                        Console.WriteLine("break");
-                    }
                     dict.Add(new Tuple<int, int>(quarterData.Item1 + i, quarter.Year), pixelIndex);
                     pixelIndex += pixelInterval;
                 }

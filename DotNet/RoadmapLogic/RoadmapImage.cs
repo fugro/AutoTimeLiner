@@ -23,7 +23,7 @@ namespace RoadmapLogic
         {
             var quarters = Quarter.GetQuarters(input.StartDate, input.Quarters);
             // Reduce the font size as number of quarters increase to fit more projects in the image.
-            settings.PlacardFontSize = settings.PlacardFontSize - (quarters.Count - 1);
+            settings.PlacardFontSize -= quarters.Count - 1;
             var fonts = new Fonts(settings);
 
             // Increase quarter width as number of quarters decrease
