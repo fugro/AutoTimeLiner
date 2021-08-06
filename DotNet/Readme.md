@@ -8,7 +8,7 @@ The core of the code is in a class library. It is written in .NET Core and uses 
 
 While the logic in this repo can be deployed to the AWS cloud, there is currently no infrastructure-as-code to do an automated deployment. The developers of this repo used the following pictured architecture successfully. All cloud components were manually deployed, and Auth0 was used to manage authenticating between components as needed.
 
-![image](https://github.com/fugro/AutoTimeLiner/architecture.jpg)
+![image](../architecture.jpg)
 
 ## Tests
 
