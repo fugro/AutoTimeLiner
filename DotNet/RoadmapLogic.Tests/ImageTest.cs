@@ -342,9 +342,47 @@ namespace RoadmapLogic.Tests
             File.WriteAllText(saveTo, new Base64Converter().ToBase64(imageFile));
         }
 
+        [TestMethod]
+        [DeploymentItem(@"Data\color_settings.json")]
+        public void CreateAndSaveImageWithCustomColors()
+        {
+            var Projects = new List<Project>
+            {
+                new Project("Task 1 - Description", "Status", "12/22/2020"),
+                new Project("Task 3 - Description", "Status", "1/25/2021"),
+                new Project("Task 5 - Description", "Status", "12/28/2020"),
+                new Project("Task 1 - Description", "Status", "3/15/2021"),
+                new Project("Task 3 - Description", "Status", "4/26/2021"),
+                new Project("Task 5 - Description", "Status", "6/21/2021"),
+                new Project("Task 7 - Description", "Status", "9/20/2021"),
+                new Project("Task 5 - Description", "Status", "8/2/2021"),
+                new Project("Task 7 - Description", "Status", "11/5/2021"),
+                new Project("Task 9 - Description", "Status", "1/15/2022"),
+                new Project("Task 7 - Description", "Status", "12/18/2021"),
+                new Project("Task 9 - Description", "Status", "3/10/2022")
+            };
+
+            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 6);
+            var settings = CreateSettingsWithCustomColors("color_settings.json");
+            var imageStream = RoadmapImage.MakeImage(input, settings);
+            var bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("test-custom-colors", bytes);
+        }
+
         private void WriteBytesToTimestampedFile(string filenamePart, byte[] bytes)
         {
             File.WriteAllBytes($"{filenamePart }-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
+        }
+
+        private static Settings CreateSettingsWithCustomColors(string fileName)
+        {
+            var colorSettings = ColorReader.Read(fileName);
+            var defaultSettigs = Settings.Default;
+
+            return new Settings(defaultSettigs.ImageWidth, defaultSettigs.ImageHeight, new Margin(20, 70), 485, 50, 25, 4, 30, 32,
+            new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20, 16, 36,
+            "Product delivery roadmap", 57, 100, colorSettings,
+            defaultSettigs.SegoeUiNormalBase64, defaultSettigs.SegoeUiBoldBase64, defaultSettigs.CopmanyLogo);
         }
     }
 }

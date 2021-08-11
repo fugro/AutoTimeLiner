@@ -48,7 +48,7 @@ namespace RoadmapLogic
                     image.DrawText(
                         teamText,
                         fonts.TeamFont,
-                        Color.Black,
+                        settings.ColorSettings.TeamColor,
                         new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
 
                     DrawLegsAndPlacards(input, settings, fonts, image, quarters);
@@ -248,7 +248,7 @@ namespace RoadmapLogic
         private static void DrawShortLine(Image<Rgba32> image, Settings settings)
         {
             image.DrawLine(
-            DefaultColors.QuantumBlue,
+            settings.ColorSettings.LineColor,
             3.3f,
             new PointF[] {
                 new PointF(settings.Margin.Left - 20, settings.Margin.Top - 25),
