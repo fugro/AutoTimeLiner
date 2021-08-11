@@ -1,4 +1,4 @@
-﻿using SixLabors.ImageSharp;
+﻿using System;
 
 namespace RoadmapLogic
 {
@@ -30,12 +30,12 @@ namespace RoadmapLogic
             string headingTitle,
             int headingFontSize,
             int headingHeight,
-            Color headingColor,
+            ColorSettings colorSettings,
             string segoeUiNormalBase64,
             string segoeUiBoldBase64,
             string companyLogo)
         {
-            Heading = new Heading(headingTitle, headingFontSize, headingHeight, headingColor);
+            Heading = new Heading(headingTitle, headingFontSize, headingHeight, colorSettings.HeadingColor);
             ImageWidth = imageWidth;
             ImageHeight = imageHeight;
             Margin = margin;
@@ -52,6 +52,7 @@ namespace RoadmapLogic
             PlacardYSpacing = placardYSpacing;
             PlacardFontSize = placardFontSize;
             QuarterFontSize = quarterFontSize;
+            ColorSettings = colorSettings;
             SegoeUiNormalBase64 = !string.IsNullOrWhiteSpace(segoeUiNormalBase64) ? segoeUiNormalBase64 : s_SegoeUiNormalBase64;
             SegoeUiBoldBase64 = !string.IsNullOrWhiteSpace(segoeUiBoldBase64) ? segoeUiBoldBase64 : SegoeUiBoldBase64;
             CopmanyLogo = !string.IsNullOrWhiteSpace(companyLogo) ? companyLogo : s_CompanyLogo;
@@ -59,8 +60,19 @@ namespace RoadmapLogic
 
         public static Settings Default => new Settings(1486, 839, new Margin(20, 70), 485, 50, 25, 4, 30, 32,
             new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20, 16, 36,
-            "Product delivery roadmap", 57, 100, DefaultColors.QuantumBlue,
+            "Product delivery roadmap", 57, 100, ColorSettings.Default,
             s_SegoeUiNormalBase64, s_SegoeUiBoldBase64, s_CompanyLogo);
+
+        public static Settings CreateWithCustomColors(string fileName)
+        {
+            var colorSettings = ColorReader.Read(fileName);
+            var settings = Settings.Default;
+            return new Settings(settings.ImageWidth, settings.ImageHeight, settings.Margin, settings.MidPoint, settings.ChevronHeight,
+                settings.ChevronOffset, settings.ChevronGap, settings.DogLegWidth, settings.TeamFontSize, settings.TopOffsets,
+                settings.BottomOffsets, settings.PlacardXSpacing, settings.PlacardYSpacing, settings.PlacardFontSize, settings.QuarterFontSize,
+                settings.Heading.Title, Convert.ToInt32(settings.Heading.FontSize), 100, colorSettings,
+                s_SegoeUiNormalBase64, s_SegoeUiBoldBase64, s_CompanyLogo);
+        }
 
         /// <summary>
         /// Plot Border (X, Y)
@@ -168,6 +180,11 @@ namespace RoadmapLogic
         }
 
         public string CopmanyLogo
+        {
+            get;
+        }
+
+        public ColorSettings ColorSettings
         {
             get;
         }

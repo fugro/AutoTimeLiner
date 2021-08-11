@@ -30,6 +30,7 @@ namespace RoadmapLogic
         public static IList<Quarter> GetQuarters(DateTime startDate, int? numberOfQuarters = QuartersDefault)
         {
             var numQuarters = QuartersDefault;
+
             if (numberOfQuarters.HasValue)
             {
                 numQuarters = numberOfQuarters.Value;
@@ -67,6 +68,7 @@ namespace RoadmapLogic
         public static Quarter GetQuarter(DateTime date)
         {
             int quarter;
+
             if (date.Month < 4)
             {
                 quarter = 1;
@@ -90,21 +92,13 @@ namespace RoadmapLogic
         public static void DrawQuarters(Image<Rgba32> image, Settings settings, IEnumerable<Quarter> quarters, Font chevronFont)
         {
             IPath chevronPath;
-            Color[] chevronColors = {
-                DefaultColors.PulseBlue03,
-                DefaultColors.StrataTurquoise,
-                DefaultColors.MotionGreen,
-                DefaultColors.CosmicSand,
-                DefaultColors.PulseBlue,
-                DefaultColors.MintGreen
-            };
 
             var chevronXStart = (float)settings.Margin.Left;
 
             for (int i = 0; i < quarters.Count(); i++)
             {
                 chevronPath = BuildChevronSymbol(chevronXStart, settings.MidPoint - (settings.ChevronHeight / 2), settings);
-                image.Mutate(x => x.Fill(chevronColors[i], chevronPath));
+                image.Mutate(x => x.Fill(settings.ColorSettings.QuarterColors[$"Quarter{i + 1}"], chevronPath));
                 chevronXStart += settings.ChevronLength + settings.ChevronGap;
             }
 
@@ -120,6 +114,7 @@ namespace RoadmapLogic
                     (settings.ChevronLength / 2) +
                     (settings.ChevronOffset / 2) -
                     (TextMeasurer.Measure(quarters.ElementAt(i).ToString(), renderOptions).Width / 2);
+
                 image.Mutate(x => x.DrawText(
                     quarters.ElementAt(i).ToString(),
                     chevronFont,

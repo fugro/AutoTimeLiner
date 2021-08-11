@@ -1,0 +1,13 @@
+{
+	"LineColor": [255, 0, 0],
+	"HeadingColor": [0, 255, 0],
+	"TeamColor": [0, 0, 255],
+	"QuarterColors": {
+		"Quarter1": [255, 0, 0],
+		"Quarter2": [0, 255, 0],
+		"Quarter3": [0, 0, 255],
+		"Quarter4": [35, 120, 55],
+		"Quarter5": [50, 75, 110],
+		"Quarter6": [125, 50, 75],
+	}
+}
