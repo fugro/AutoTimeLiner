@@ -40,7 +40,7 @@ namespace RoadmapLogic
                     DrawShortLine(image, settings);
 
                     image.DrawText(
-                        settings.Heading.Title,
+                        input.Title??settings.Heading.Title,
                         fonts.HeaderFont,
                         settings.Heading.Color,
                         new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));

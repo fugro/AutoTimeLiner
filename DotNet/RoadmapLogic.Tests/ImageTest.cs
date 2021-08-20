@@ -17,7 +17,7 @@ namespace RoadmapLogic.Tests
                 new Project("Test Product", "Not Started", "06/01/2021")
             };
 
-            Input input = new Input("Your Team:", "01/01/2021", Projects, 4);
+            Input input = new Input(null, "Your Team:", "01/01/2021", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -37,12 +37,29 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "6/21/2021")
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test", bytes);
         }
+
+        [TestMethod]
+        public void CreateAndSaveImageWithCustomTitle()
+        {
+            var Projects = new List<Project>
+            {
+                new Project("Build Product", "Ongoing", "01/01/2021"),
+                new Project("Test Product", "Not Started", "06/01/2021")
+            };
+
+            Input input = new Input("Your Title", "Your Team:", "01/01/2021", Projects, 4);
+
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("test-customTitle", bytes);
+        }
+
 
         [TestMethod]
         public void CreateAndSaveImageWithSixQuarters()
@@ -63,7 +80,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 9 - Description", "Status", "3/10/2022")
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 6);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 6);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -83,7 +100,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "6/21/2021")
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 2);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 2);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -103,7 +120,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "6/21/2021"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -124,7 +141,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "10/21/2021"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -145,7 +162,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "2/22/2020"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -165,7 +182,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "2/22/2020"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2021", Projects, 4);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2021", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -182,7 +199,7 @@ namespace RoadmapLogic.Tests
                 new Project(string.Empty, string.Empty, "4/26/2021"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -202,7 +219,7 @@ namespace RoadmapLogic.Tests
                 new Project(string.Empty, "Status", string.Empty)
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new Input(null, "Enter Team Name Here:", "12/15/2020", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
@@ -253,7 +270,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 37, This is the", "description that will", "12/31/2021"),
             };
 
-            Input input = new Input("Truncated Placard Test:", "01/01/2021", Projects, 4);
+            Input input = new Input(null, "Truncated Placard Test:", "01/01/2021", Projects, 4);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);            
             var bytes = imageStream.ToArray();
@@ -302,7 +319,7 @@ namespace RoadmapLogic.Tests
                 new Project("Task 37, This is the", "description that will", "12/31/2021"),
             };
 
-            Input input = new Input("Long Name Placard Test:", "01/01/2021", Projects, 2);
+            Input input = new Input(null, "Long Name Placard Test:", "01/01/2021", Projects, 2);
 
             var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();

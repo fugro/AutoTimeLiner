@@ -11,6 +11,18 @@ const configureClient = async () => {
         companySpans[i].innerHTML = config.company;
     }
 
+    const versionSpans = document.getElementsByClassName('version');
+    for (var i = 0; i < versionSpans.length; i++) {
+        if (config.version == null)
+        {
+            versionSpans[i].innerHTML = "";
+        }
+        else
+        {
+            versionSpans[i].innerHTML = config.version;
+        }
+    }
+
     window.apiUrl = config.apiUrl;
 
     document.getElementById('authenticating').innerHTML = (window.apiUrl.indexOf('<') > -1)

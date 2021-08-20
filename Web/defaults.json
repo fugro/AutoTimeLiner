@@ -3,5 +3,6 @@
     "clientId": "<clientId>",
     "audience": "<audience>",
     "apiUrl": "<apiUrl>",
-    "company": "<your_company_here>"
+    "company": "<your_company_here>",
+    "version": "<version>"
 }

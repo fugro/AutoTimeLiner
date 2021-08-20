@@ -7,17 +7,19 @@ namespace RoadmapLogic
     public class Input
     {
         public Input(
+            string title,
             string team,
-            string startDate,
+            string start_date,
             IEnumerable<Project> projects,
-            int? numberOfQuarters = 4)
+            int? quarters = 4)
         {
             Team = team;
-            if (IsValid = DateConverter.ConvertToDate(startDate, out DateTime date))
+            if (IsValid = DateConverter.ConvertToDate(start_date, out DateTime date))
             {
+                Title = title;
                 StartDate = date;
                 Projects = projects;
-                Quarters = numberOfQuarters;
+                Quarters = quarters;
 
                 if (projects.Any(p => !p.IsValid))
                 {
@@ -31,6 +33,8 @@ namespace RoadmapLogic
         }
 
         public bool IsValid { get; private set; }
+
+        public string Title { get; }
 
         public string Team { get; }
 

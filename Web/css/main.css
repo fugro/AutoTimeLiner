@@ -137,6 +137,10 @@ input[type=file] {
   display: table;
 }
 
+.version {
+  font-size: 70%;
+}
+
 [class*="col-"] {
   float: left;
   padding: 15px;
