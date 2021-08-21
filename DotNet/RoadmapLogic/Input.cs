@@ -7,11 +7,12 @@ namespace RoadmapLogic
     public class Input
     {
         public Input(
-            string title,
             string team,
             string start_date,
             IEnumerable<Project> projects,
-            int? quarters = 4)
+            int? quarters = 4,
+            string title = null
+            )
         {
             Team = team;
             if (IsValid = DateConverter.ConvertToDate(start_date, out DateTime date))

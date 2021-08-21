@@ -25,7 +25,7 @@ namespace RoadmapLambda
         /// </summary>
         public RoadmapLogic.Input ToRoadmapInput()
         {
-            return new RoadmapLogic.Input(Title, Team, StartDate, Projects.Select(p => p.ToRoadmapProject()), Quarters);
+            return new RoadmapLogic.Input(Team, StartDate, Projects.Select(p => p.ToRoadmapProject()), Quarters, Title);
         }
     }
 

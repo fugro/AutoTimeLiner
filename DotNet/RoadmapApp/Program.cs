@@ -15,6 +15,7 @@ namespace RoadmapApp
                 Console.WriteLine("Usage: RoadmapApp.exe [Path to input file]");
                 Console.WriteLine("Press any key to Exit Application:");
                 Console.ReadKey();
+                return;
             }
 
             Input input = JsonConvert.DeserializeObject<Input>(File.ReadAllText(args[0]));
