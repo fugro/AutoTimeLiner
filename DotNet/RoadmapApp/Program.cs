@@ -13,7 +13,7 @@ namespace RoadmapApp
             if (args.Length != 1 || File.Exists(args[0]) == false)
             {
                 Console.WriteLine("Usage: RoadmapApp.exe [Path to input file]");
-                Console.WriteLine("Press any key to Exit Application:");
+                Console.WriteLine("Press any key to exit application:");
                 Console.ReadKey();
                 return;
             }

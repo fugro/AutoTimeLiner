@@ -10,7 +10,6 @@ namespace RoadmapLogic.Tests
         public void ValidWhenDatesAreValid()
         {
             var input = new Input(
-                null,
                 "Team",
                 "2021-01-01",
                 new List<Project>
@@ -24,7 +23,6 @@ namespace RoadmapLogic.Tests
         public void InvalidWhenStartDateIsInvalid()
         {
             var input = new Input(
-                null,
                 "Team",
                 "invalidDate",
                 new List<Project>());
@@ -35,7 +33,6 @@ namespace RoadmapLogic.Tests
         public void InvalidWhenAnyProjectIsInvalid()
         {
             var input = new Input(
-                null,
                 "Team",
                 "2021-01-01",
                 new List<Project>
