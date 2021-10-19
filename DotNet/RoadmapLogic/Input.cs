@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,18 +7,22 @@ namespace RoadmapLogic
 {
     public class Input
     {
+        [JsonConstructor]
         public Input(
             string team,
-            string startDate,
+            [JsonProperty("start_date")]string startDate,
             IEnumerable<Project> projects,
-            int? numberOfQuarters = 4)
+            int? quarters = 4,
+            string title = null
+            )
         {
             Team = team;
             if (IsValid = DateConverter.ConvertToDate(startDate, out DateTime date))
             {
+                Title = title;
                 StartDate = date;
                 Projects = projects;
-                Quarters = numberOfQuarters;
+                Quarters = quarters;
 
                 if (projects.Any(p => !p.IsValid))
                 {
@@ -30,7 +35,9 @@ namespace RoadmapLogic
             }
         }
 
-        public bool IsValid { get; private set; }
+        public bool IsValid { get; }
+
+        public string Title { get; }
 
         public string Team { get; }
 

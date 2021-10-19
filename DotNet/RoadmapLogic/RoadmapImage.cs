@@ -10,7 +10,7 @@ namespace RoadmapLogic
 {
     public static class RoadmapImage
     {
-        private const string  s_MissingProjectMessage = "Alert! Projects have been omitted from the roadmap. Please Review.";
+        private const string  s_MissingProjectMessage = "Alert! Projects have been omitted from the roadmap. Please review.";
         private const string  s_BeforeStartQuarterMessage = "Projects before start quarter were omitted.";
         private const string  s_AfterLastQuarterMessage = "Projects after last quarter were omitted.";
         private const string s_OutsideQuarterRangeMessage = "Projects before start and after last quarter were omitted.";
@@ -40,7 +40,7 @@ namespace RoadmapLogic
                     DrawShortLine(image, settings);
 
                     image.DrawText(
-                        settings.Heading.Title,
+                        input.Title??settings.Heading.Title,
                         fonts.HeaderFont,
                         settings.Heading.Color,
                         new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));
@@ -72,7 +72,7 @@ namespace RoadmapLogic
                 using (var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight))
                 {
                     image.DrawText(
-                        "Failed! Provided Json is Not Valid!\nPlease review input and retry.",
+                        "Failed! Provided JSON is not valid!\nPlease review input and retry.",
                         fonts.HeaderFont,
                         settings.Heading.Color,
                         new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));

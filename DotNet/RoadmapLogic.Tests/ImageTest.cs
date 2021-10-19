@@ -45,6 +45,23 @@ namespace RoadmapLogic.Tests
         }
 
         [TestMethod]
+        public void CreateAndSaveImageWithCustomTitle()
+        {
+            var Projects = new List<Project>
+            {
+                new Project("Build Product", "Ongoing", "01/01/2021"),
+                new Project("Test Product", "Not Started", "06/01/2021")
+            };
+
+            Input input = new Input("Your Team:", "01/01/2021", Projects, 4, "Your Title");
+
+            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("test-customTitle", bytes);
+        }
+
+
+        [TestMethod]
         public void CreateAndSaveImageWithSixQuarters()
         {
             var Projects = new List<Project>

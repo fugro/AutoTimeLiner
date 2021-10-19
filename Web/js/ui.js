@@ -1,19 +1,20 @@
 const useSample = () => {
     var thisYear = new Date().getFullYear();
     const sample = {
+        'title': 'Product delivery roadmap',
         'team': 'Your Team',
-        'start_date': '01/01/' + thisYear.toString(),
+        'start_date': '01 Jan ' + thisYear.toString(),
         'quarters': 4,
         'projects': [
             {
                 'name': 'Build Product',
                 'label': 'Ongoing',
-                'date': '01/01/' + thisYear.toString()
+                'date': '01 Jan ' + thisYear.toString()
             },
             {
                 'name': 'Test Product',
                 'label': 'Not Started',
-                'date': '06/01/' + thisYear.toString()
+                'date': '01 Jun ' + thisYear.toString()
             }
         ]
     };

@@ -6,12 +6,12 @@ namespace RoadmapLogic
 {
     public class Project
     {
-        public Project(string name, string label, string inputDate)
+        public Project(string name, string label, string date)
         {
             Name = name;
             Label = label;
-            IsValid = DateConverter.ConvertToDate(inputDate, out DateTime date);
-            Date = date;
+            IsValid = DateConverter.ConvertToDate(date, out DateTime pDate);
+            Date = pDate;
         }
 
         public bool IsValid { get; private set; }

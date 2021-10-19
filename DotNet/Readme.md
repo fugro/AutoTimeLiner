@@ -4,6 +4,18 @@ Generates product delivery roadmaps from JSON input and exports them as images.
 
 The core of the code is in a class library. It is written in .NET Core and uses [SixLabors.ImageSharp](https://docs.sixlabors.com/index.html) to enable cross-platform compatibility. To demonstrate this, the project also includes a simple AWS Lambda project that responds to valid requests with roadmap images in Base64 format.
 
+## RoadmapApp
+
+A Command Line Application has been created to allow generating a roadmap image from an input file.
+
+Usage: supply a Roadmap compatible json file path as an argument to Roadmap.exe application via the command line. 
+
+`RoadmapApp.exe C:\sample\input.json`
+
+Or drag and drop the **json** file onto the RoadmapApp executable.
+
+**Output:** An image will be created in the systems temp folder with the format **yyyy-MM-dd-HH-mm-sss-milliseconds.png** and will be automatically opened with the associated application for viewing png files. 
+
 ## Cloud Architecture
 
 While the logic in this repo can be deployed to the AWS cloud, there is currently no infrastructure-as-code to do an automated deployment. The developers of this repo used the following pictured architecture successfully. All cloud components were manually deployed, and Auth0 was used to manage authenticating between components as needed.
