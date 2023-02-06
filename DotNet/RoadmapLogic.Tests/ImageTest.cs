@@ -339,7 +339,7 @@ namespace RoadmapLogic.Tests
 
             var saveTo = Path.Combine(pathUpToFilename, txtFile);
 
-            File.WriteAllText(saveTo, new Base64Converter().ToBase64(imageFile));
+            File.WriteAllText(saveTo, Base64Converter.ToBase64(imageFile));
         }
 
         [TestMethod]

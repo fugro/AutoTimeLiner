@@ -42,12 +42,12 @@ namespace RoadmapLogic.Tests
             proceed = DateConverter.ConvertToDate("Sep 5, 2021", out date);
 
             Assert.AreEqual(false, proceed);
-            Assert.AreNotEqual("09/05/2021", date);
+            Assert.AreNotEqual(new DateTime(2021, 9, 5), date);
 
             proceed = DateConverter.ConvertToDate("Mca 4, 021", out date);
 
             Assert.AreEqual(false, proceed);
-            Assert.AreNotEqual("09/05/2021", date);
+            Assert.AreNotEqual(new DateTime(2021, 9, 5), date);
         }
     }
 }

@@ -8,11 +8,11 @@ namespace RoadmapLambda
 {
     public class Function
     {
-        public string FunctionHandler(FunctionInput input, ILambdaContext context)
+        public static string FunctionHandler(FunctionInput input, ILambdaContext context)
         {
             var image = RoadmapImage.MakeImage(input.ToRoadmapInput(), Settings.Default);
 
-            return new Base64Converter().ToBase64(image);
+            return Base64Converter.ToBase64(image);
         }
     }
 }
