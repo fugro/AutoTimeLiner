@@ -25,6 +25,22 @@ namespace RoadmapLogic.Tests
         }
 
         [TestMethod]
+        public void CreateAndSaveDefaultImageWithBackgroundColor()
+        {
+            var projects = new List<Project>
+            {
+                new Project("Build Product", "Ongoing", "01/01/2021"),
+                new Project("Test Product", "Not Started", "06/01/2021")
+            };
+
+            Input input = new("Your Team:", "01/01/2021", projects, 4, bgColorHex:"#dedede");
+
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
+            var bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("defaultWithRedBackground", bytes);
+        }
+
+        [TestMethod]
         public void CreateAndSaveImage()
         {
             var projects = new List<Project>

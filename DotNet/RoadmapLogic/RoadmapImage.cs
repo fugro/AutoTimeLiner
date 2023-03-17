@@ -30,7 +30,11 @@ namespace RoadmapLogic
             settings.ChevronLength = (settings.ImageWidth - settings.Margin.Left - settings.Margin.Right - settings.ChevronOffset - 
                                         ((quarters.Count - 1) * settings.ChevronGap)) / quarters.Count;
 
-            using var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight);
+            Rgba32 bgColor = (input.BgColorHex is not null && Rgba32.TryParseHex(input.BgColorHex, out Rgba32 color))
+                ? color
+                : Color.White;
+
+            using var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight, bgColor);
 
             if (input.IsValid)
             {
@@ -51,7 +55,7 @@ namespace RoadmapLogic
                     settings.ColorSettings.TeamColor,
                     new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
 
-                DrawLegsAndPlacards(input, settings, fonts, image, quarters);
+                DrawLegsAndPlacards(input, settings, fonts, image, quarters, bgColor);
 
                 Quarter.DrawQuarters(image, settings, quarters, fonts.QuarterFont);
 
@@ -74,7 +78,7 @@ namespace RoadmapLogic
             return stream;
         }
 
-        private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, IEnumerable<Quarter> quarters)
+        private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, IEnumerable<Quarter> quarters, Rgba32 bgColor)
         {
             var noProjectWithinQuartersMessage = string.Empty;
 
@@ -177,7 +181,7 @@ namespace RoadmapLogic
                             placardHeight += padding;
                             placardHeight += TextMeasurer.Measure(project.Date.ToString("dd MMM yyyy"), renderOptions).Height;
                             placardHeight += padding;
-                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, tempWidth, (float)placardHeight);
+                            Placard.Draw(image, project, placardPoints, fonts.PlacardFont, tempWidth, (float)placardHeight, bgColor);
                         }
 
                         if (index == 2)
