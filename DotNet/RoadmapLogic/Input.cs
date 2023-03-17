@@ -10,9 +10,10 @@ namespace RoadmapLogic
         [JsonConstructor]
         public Input(
             string team,
-            [JsonProperty("start_date")]string startDate,
+            [JsonProperty("start_date")] string startDate,
             IEnumerable<Project> projects,
-            int? quarters = 4,
+            int quarters = 4,
+            bool? debug = null,
             string title = null
             )
         {
@@ -20,6 +21,7 @@ namespace RoadmapLogic
             if (IsValid = DateConverter.ConvertToDate(startDate, out DateTime date))
             {
                 Title = title;
+                Debug = debug ?? false;
                 StartDate = date;
                 Projects = projects;
                 Quarters = quarters;
@@ -34,6 +36,8 @@ namespace RoadmapLogic
                 IsValid = false;
             }
         }
+
+        public bool Debug { get; }
 
         public bool IsValid { get; }
 

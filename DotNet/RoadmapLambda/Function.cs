@@ -8,9 +8,9 @@ namespace RoadmapLambda
 {
     public class Function
     {
-        public static string FunctionHandler(FunctionInput input, ILambdaContext context)
+        public static string FunctionHandler(FunctionInput input, ILambdaContext _)
         {
-            var image = RoadmapImage.MakeImage(input.ToRoadmapInput(), Settings.Default);
+            var image = new MemoryStream().MakeImage(input.ToRoadmapInput(), Settings.Default);
 
             return Base64Converter.ToBase64(image);
         }

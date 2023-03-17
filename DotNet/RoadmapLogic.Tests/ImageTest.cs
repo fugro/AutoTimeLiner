@@ -11,15 +11,15 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveDefaultImage()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Build Product", "Ongoing", "01/01/2021"),
                 new Project("Test Product", "Not Started", "06/01/2021")
             };
 
-            Input input = new Input("Your Team:", "01/01/2021", Projects, 4);
+            Input input = new("Your Team:", "01/01/2021", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("default", bytes);
         }
@@ -27,7 +27,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImage()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "12/22/2020"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -37,9 +37,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "6/21/2021")
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test", bytes);
         }
@@ -47,15 +47,15 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithCustomTitle()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Build Product", "Ongoing", "01/01/2021"),
                 new Project("Test Product", "Not Started", "06/01/2021")
             };
 
-            Input input = new Input("Your Team:", "01/01/2021", Projects, 4, "Your Title");
+            Input input = new("Your Team:", "01/01/2021", projects, 4, title:"Your Title");
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-customTitle", bytes);
         }
@@ -64,7 +64,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithSixQuarters()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "12/22/2020"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -80,9 +80,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 9 - Description", "Status", "3/10/2022")
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 6);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 6);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-sixQuarters", bytes);
         }
@@ -90,7 +90,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithTwoQuarters()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "12/22/2020"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -100,9 +100,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "6/21/2021")
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 2);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 2);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-twoQuarters", bytes);
         }
@@ -110,7 +110,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithPreviousQuarter()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "2/22/2020"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -120,9 +120,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "6/21/2021"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-previousQuarter", bytes);
         }
@@ -130,7 +130,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithNextQuarter()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "12/22/2020"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -141,9 +141,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "10/21/2021"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-nextQuarter", bytes);
         }
@@ -151,7 +151,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWitPreviousAndNextQuarter()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "10/21/2021"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -162,9 +162,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "2/22/2020"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-previous-nextQuarter", bytes);
         }
@@ -172,7 +172,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithOutsideStartDateAndQuarters()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "6/21/2021"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -182,9 +182,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 5 - Description", "Status", "2/22/2020"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2021", Projects, 4);
+            Input input = new("Enter Team Name Here:", "12/15/2021", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-outsideStartDateAndQuarters", bytes);
         }
@@ -192,16 +192,16 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithEmptyValues()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project(string.Empty, "Status", "2/22/2020"),
                 new Project("Task 3 - Description", string.Empty, "1/25/2021"),
                 new Project(string.Empty, string.Empty, "4/26/2021"),
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-missingNameAndValue", bytes);
         }
@@ -209,7 +209,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithEmptyDateValuesShouldReturnError()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project(string.Empty, "Status", "2/22/2020"),
                 new Project("Task 3 - Description", string.Empty, "1/25/2021"),
@@ -219,9 +219,9 @@ namespace RoadmapLogic.Tests
                 new Project(string.Empty, "Status", string.Empty)
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 4);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-missingDate", bytes);
         }
@@ -229,7 +229,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithProjectsTruncatedOnRightSide()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1, This description should be too long to be viewed", "Status", "1/1/2021"),
                 new Project("Task 2", "Status", "1/10/2021"),
@@ -270,9 +270,9 @@ namespace RoadmapLogic.Tests
                 new Project("Task 37, This is the", "description that will", "12/31/2021"),
             };
 
-            Input input = new Input("Truncated Placard Test:", "01/01/2021", Projects, 4);
+            Input input = new("Truncated Placard Test:", "01/01/2021", projects, 4);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);            
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);            
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-truncated", bytes);
         }
@@ -280,7 +280,7 @@ namespace RoadmapLogic.Tests
         [TestMethod]
         public void CreateAndSaveImageWithProjectNameAndTwoQuarters()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1, This description should be too long to be viewed", "Status", "1/1/2021"),
                 new Project("Task 2, This is a little long", "The status is unknown", "1/10/2021"),
@@ -319,11 +319,49 @@ namespace RoadmapLogic.Tests
                 new Project("Task 37, This is the", "description that will", "12/31/2021"),
             };
 
-            Input input = new Input("Long Name Placard Test:", "01/01/2021", Projects, 2);
+            Input input = new("Long Name Placard Test:", "01/01/2021", projects, 2);
 
-            var imageStream = RoadmapImage.MakeImage(input, Settings.Default);
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-longName-twoQuarters", bytes);
+        }
+
+        [TestMethod]
+        public void CreateAndSaveImageWithProjectNameAndTwoQuartersWithDebug()
+        {
+            var projects = new List<Project>
+            {
+                new Project("Task 1, This is an example of a very long description that would cause overlap", "Status", "1/1/2021"),
+                new Project("Task 2, This is an example of a very long description that would cause overlap", "The status is unknown", "1/10/2021"),
+                new Project("Task 3, This is an example of a very long description that would cause overlap", "Status", "1/20/2021"),
+                new Project("Task 4, This is an example of a very long description that would cause overlap", "The status is unknown", "2/1/2021"),
+                new Project("Task 5, This is an example of a very long description that would cause overlap", "Status", "2/10/2021"),
+                new Project("Task 6, This is an example of a very long description that would cause overlap", "Status", "2/20/2021"),
+                new Project("Task 7, This is an example of a very long description that would cause overlap", "The status is unknown", "3/1/2021"),
+                new Project("Task 8, This is an example of a very long description that would cause overlap", "Status", "3/10/2021"),
+                new Project("Task 9, This is an example of a very long description that would cause overlap", "Status", "3/20/2021"),
+                new Project("Task 10, This is an example of a very long description that would cause overlap", "Status", "4/1/2021"),
+                new Project("Task 11, This is an example of a very long description that would cause overlap", "Status", "4/10/2021"),
+                new Project("Task 12, This is an example of a very long description that would cause overlap", "The status is unknown", "4/20/2021"),
+                new Project("Task 13, This is an example of a very long description that would cause overlap", "Status", "5/1/2021"),
+                new Project("Task 14, This is an example of a very long description that would cause overlap", "The status is unknown", "5/10/2021"),
+                new Project("Task 15, This is an example of a very long description that would cause overlap", "Status", "5/20/2021"),
+                new Project("Task 16, This is an example of a very long description that would cause overlap", "Status", "6/1/2021"),
+                new Project("Task 17, This is an example of a very long description that would cause overlap", "The status is unknown", "6/10/2021"),
+                new Project("Task 18, This is an example of a very long description that would cause overlap", "The status is unknown", "6/20/2021"),
+            };
+
+            Input input = new("Long Name Placard Test:", "01/01/2021", projects, 2);
+
+            var imageStream = new MemoryStream().MakeImage(input, Settings.Default);
+            var bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("test-longName-twoQuarters-Debug-Off", bytes);
+
+            input = new Input("Long Name Placard Test:", "01/01/2021", projects, 2, true);
+
+            imageStream = new MemoryStream().MakeImage(input, Settings.Default);
+            bytes = imageStream.ToArray();
+            WriteBytesToTimestampedFile("test-longName-twoQuarters-Debug-On", bytes);
         }
 
         [TestMethod]
@@ -335,7 +373,7 @@ namespace RoadmapLogic.Tests
 
             var txtFile = Path.GetFileNameWithoutExtension(imageFile) + ".txt";
 
-            var pathUpToFilename = imageFile.Substring(0, imageFile.LastIndexOf(Path.DirectorySeparatorChar));
+            var pathUpToFilename = imageFile[..imageFile.LastIndexOf(Path.DirectorySeparatorChar)];
 
             var saveTo = Path.Combine(pathUpToFilename, txtFile);
 
@@ -346,7 +384,7 @@ namespace RoadmapLogic.Tests
         [DeploymentItem(@"Data\color_settings.json")]
         public void CreateAndSaveImageWithCustomColors()
         {
-            var Projects = new List<Project>
+            var projects = new List<Project>
             {
                 new Project("Task 1 - Description", "Status", "12/22/2020"),
                 new Project("Task 3 - Description", "Status", "1/25/2021"),
@@ -362,14 +400,14 @@ namespace RoadmapLogic.Tests
                 new Project("Task 9 - Description", "Status", "3/10/2022")
             };
 
-            Input input = new Input("Enter Team Name Here:", "12/15/2020", Projects, 6);
+            Input input = new("Enter Team Name Here:", "12/15/2020", projects, 6);
             var settings = CreateSettingsWithCustomColors("color_settings.json");
-            var imageStream = RoadmapImage.MakeImage(input, settings);
+            var imageStream = new MemoryStream().MakeImage(input, settings);
             var bytes = imageStream.ToArray();
             WriteBytesToTimestampedFile("test-custom-colors", bytes);
         }
 
-        private void WriteBytesToTimestampedFile(string filenamePart, byte[] bytes)
+        private static void WriteBytesToTimestampedFile(string filenamePart, byte[] bytes)
         {
             File.WriteAllBytes($"{filenamePart }-{DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png", bytes);
         }

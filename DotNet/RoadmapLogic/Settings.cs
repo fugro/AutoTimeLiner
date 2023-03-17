@@ -58,7 +58,7 @@ namespace RoadmapLogic
             CopmanyLogo = !string.IsNullOrWhiteSpace(companyLogo) ? companyLogo : s_CompanyLogo;
         }
 
-        public static Settings Default => new Settings(1486, 839, new Margin(20, 70), 485, 50, 25, 4, 30, 32,
+        public static Settings Default => new(1486, 839, new Margin(20, 70), 485, 50, 25, 4, 30, 32,
             new int[] { 217, 141, 65 }, new int[] { 176, 100, 24 }, 10, 20, 16, 36,
             "Product delivery roadmap", 57, 100, ColorSettings.Default,
             s_SegoeUiNormalBase64, s_SegoeUiBoldBase64, s_CompanyLogo);
