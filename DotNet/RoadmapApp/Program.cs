@@ -54,7 +54,7 @@ namespace RoadmapApp
 
             if (File.Exists(outputFile))
             {
-                Process process = new Process();
+                Process process = new();
                 process.StartInfo.FileName = "explorer";
                 process.StartInfo.Arguments = outputFile;
                 process.StartInfo.RedirectStandardOutput = false;
