@@ -13,18 +13,16 @@ namespace RoadmapLogic
             {
                 return ColorSettings.Default;
             }
-            
-            using (var streamReader = new StreamReader(fileName))
-            {
-                var jsonSerializer = new JsonSerializer();
-                var customColors = (CustomColors)jsonSerializer.Deserialize(streamReader, typeof(CustomColors));
-                var quarterColors = MakeQuarterColors(customColors.QuarterColors);
 
-                return new ColorSettings(MakeColor(customColors.LineColor),
-                                         MakeColor(customColors.HeadingColor),
-                                         MakeColor(customColors.TeamColor), 
-                                         quarterColors);
-            }
+            using var streamReader = new StreamReader(fileName);
+            var jsonSerializer = new JsonSerializer();
+            var customColors = (CustomColors)jsonSerializer.Deserialize(streamReader, typeof(CustomColors));
+            var quarterColors = MakeQuarterColors(customColors.QuarterColors);
+
+            return new ColorSettings(MakeColor(customColors.LineColor),
+                                     MakeColor(customColors.HeadingColor),
+                                     MakeColor(customColors.TeamColor),
+                                     quarterColors);
         }
 
         private static IDictionary<string, Color> MakeQuarterColors(QuarterColors quarterColors)

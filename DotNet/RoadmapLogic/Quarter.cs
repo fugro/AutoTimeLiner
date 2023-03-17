@@ -45,7 +45,7 @@ namespace RoadmapLogic
             var startQuarter = GetQuarter(startDate);
             int quarter = startQuarter.Index;
 
-            List<Quarter> quarters = new List<Quarter> { startQuarter };
+            List<Quarter> quarters = new() { startQuarter };
             
             for (int i = 1; i < numQuarters; i++)
             {

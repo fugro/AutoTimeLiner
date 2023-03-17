@@ -19,7 +19,7 @@ namespace RoadmapLogic
         private const string s_BeforeStartQuarterKey = "BeforeStartQuarter";
         private const string s_AfterLastQuarterKey = "AfterLastQuarter";
 
-        public static MemoryStream MakeImage(Input input, Settings settings)
+        public static MemoryStream MakeImage(this MemoryStream stream, Input input, Settings settings)
         {
             var quarters = Quarter.GetQuarters(input.StartDate, input.Quarters);
             // Reduce the font size as number of quarters increase to fit more projects in the image.
@@ -30,67 +30,55 @@ namespace RoadmapLogic
             settings.ChevronLength = (settings.ImageWidth - settings.Margin.Left - settings.Margin.Right - settings.ChevronOffset - 
                                         ((quarters.Count - 1) * settings.ChevronGap)) / quarters.Count;
 
+            using var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight);
+
             if (input.IsValid)
             {
                 var teamText = string.IsNullOrWhiteSpace(input.Team) ? "[No team supplied]" : input.Team;
 
-                using (var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight))
-                {
-                    // Draw short line just above image title
-                    DrawShortLine(image, settings);
+                // Draw short line just above image title
+                DrawShortLine(image, settings);
 
-                    image.DrawText(
-                        input.Title??settings.Heading.Title,
-                        fonts.HeaderFont,
-                        settings.Heading.Color,
-                        new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));
+                image.DrawText(
+                    input.Title ?? settings.Heading.Title,
+                    fonts.HeaderFont,
+                    settings.Heading.Color,
+                    new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));
 
-                    image.DrawText(
-                        teamText,
-                        fonts.TeamFont,
-                        settings.ColorSettings.TeamColor,
-                        new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
+                image.DrawText(
+                    teamText,
+                    fonts.TeamFont,
+                    settings.ColorSettings.TeamColor,
+                    new PointF(settings.Margin.Right, settings.MidPoint - settings.PlotHeight - settings.TeamFontSize - 10));
 
-                    DrawLegsAndPlacards(input, settings, fonts, image, quarters);
+                DrawLegsAndPlacards(input, settings, fonts, image, quarters);
 
-                    Quarter.DrawQuarters(image, settings, quarters, fonts.QuarterFont);
+                Quarter.DrawQuarters(image, settings, quarters, fonts.QuarterFont);
 
-                    image.DrawImage(
-                        settings.CopmanyLogo,
-                        new Point(settings.ImageWidth - 224, settings.ImageHeight - 86),
-                        1);
-
-                    using (var ms = new MemoryStream())
-                    {
-                        image.SaveAsPng(ms);
-                        return ms;
-                    }
-                }
+                image.DrawImage(
+                    settings.CopmanyLogo,
+                    new Point(settings.ImageWidth - 224, settings.ImageHeight - 86),
+                    1);
             }
             else
             {
-                using (var image = new Image<Rgba32>(settings.ImageWidth, settings.ImageHeight))
-                {
-                    image.DrawText(
-                        "Failed! Provided JSON is not valid!\nPlease review input and retry.",
-                        fonts.HeaderFont,
-                        settings.Heading.Color,
-                        new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));
-
-                    using (var ms = new MemoryStream())
-                    {
-                        image.SaveAsPng(ms);
-                        return ms;
-                    }
-                }
+                image.DrawText(
+                    "Failed! Provided JSON is not valid!\nPlease review input and retry.",
+                    fonts.HeaderFont,
+                    settings.Heading.Color,
+                    new PointF(settings.Margin.Right, settings.Margin.Top + Calculations.TrimFont(settings.Heading.FontSize)));   
             }
+
+            image.SaveAsPng(stream);
+
+            return stream;
         }
 
         private static void DrawLegsAndPlacards(Input input, Settings settings, Fonts fonts, Image<Rgba32> image, IEnumerable<Quarter> quarters)
         {
             var noProjectWithinQuartersMessage = string.Empty;
 
-            RendererOptions renderOptions = new RendererOptions(fonts.PlacardFont);
+            RendererOptions renderOptions = new(fonts.PlacardFont);
             var missingProjectsMessage = string.Empty;
             var beforeStartQuarterMessage = string.Empty;
             var afterLastQuarterMessage = string.Empty;
@@ -134,7 +122,7 @@ namespace RoadmapLogic
 
                     if (positions.TryGetValue(new Tuple<int, int>(Calculations.GetJulianDay(project.Date), quarter.Year), out float xPos))
                     {
-                        if (index == 0)
+                        if (input.Debug == false && index == 0)
                         {
                             int i = index;
                             for (; i < 2; i++)

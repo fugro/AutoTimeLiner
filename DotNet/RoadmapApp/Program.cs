@@ -46,7 +46,9 @@ namespace RoadmapApp
 
             Input input = JsonConvert.DeserializeObject<Input>(File.ReadAllText(args[0]));
 
-            var imageStream = RoadmapImage.MakeImage(input, File.Exists(colorSettingsFile) ? Settings.CreateWithCustomColors(colorSettingsFile) : Settings.Default);
+            using var imageStream = new MemoryStream().MakeImage(input, File.Exists(colorSettingsFile)
+                ? Settings.CreateWithCustomColors(colorSettingsFile)
+                : Settings.Default);
             var bytes = imageStream.ToArray();
             string outputFile = Path.Combine(Path.GetTempPath(), $"{ DateTime.Now:yyyy-MM-dd-hh-mm-ss-fff}.png");
             
@@ -110,7 +112,7 @@ namespace RoadmapApp
         {
             try
             {
-                string red = input.Substring(0, 2);
+                string red = input[..2];
                 string green = input.Substring(2, 2);
                 string blue = input.Substring(4, 2);
 

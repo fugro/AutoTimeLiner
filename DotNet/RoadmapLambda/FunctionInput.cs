@@ -7,6 +7,8 @@ namespace RoadmapLambda
     /// </summary>
     public class FunctionInput
     {
+        public bool Debug { get; set; }
+
         public string Title { get; set; }
 
         public string Team { get; set; }
@@ -14,7 +16,7 @@ namespace RoadmapLambda
         [JsonPropertyName("start_date")]
         public string StartDate { get; set; }
 
-        public int? Quarters { get; set; }
+        public int Quarters { get; set; }
 
         public IEnumerable<FunctionProject> Projects { get; set; }
 
@@ -23,7 +25,7 @@ namespace RoadmapLambda
         /// </summary>
         public RoadmapLogic.Input ToRoadmapInput()
         {
-            return new RoadmapLogic.Input(Team, StartDate, Projects.Select(p => p.ToRoadmapProject()), Quarters, Title);
+            return new RoadmapLogic.Input(Team, StartDate, Projects.Select(p => p.ToRoadmapProject()), Quarters, Debug, Title);
         }
     }
 
