@@ -14,13 +14,15 @@ namespace RoadmapLogic
             IEnumerable<Project> projects,
             int quarters = 4,
             bool? debug = null,
-            string title = null
+            string title = null,
+            [JsonProperty("bg_color_hex")] string bgColorHex = null
             )
         {
             Team = team;
             if (IsValid = DateConverter.ConvertToDate(startDate, out DateTime date))
             {
                 Title = title;
+                BgColorHex = bgColorHex;
                 Debug = debug ?? false;
                 StartDate = date;
                 Projects = projects;
@@ -36,6 +38,8 @@ namespace RoadmapLogic
                 IsValid = false;
             }
         }
+
+        public string BgColorHex { get; }
 
         public bool Debug { get; }
 

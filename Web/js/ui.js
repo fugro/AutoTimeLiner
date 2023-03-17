@@ -5,6 +5,8 @@ const useSample = () => {
         'team': 'Your Team',
         'start_date': '01 Jan ' + thisYear.toString(),
         'quarters': 4,
+		'debug': false,
+		'bg_color_hex': "#ffffff",
         'projects': [
             {
                 'name': 'Build Product',

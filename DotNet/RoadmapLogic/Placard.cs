@@ -12,7 +12,7 @@ namespace RoadmapLogic
         /// <summary>
         /// Draw Placard text to image.
         /// </summary>
-        public static void Draw(Image<Rgba32> image, Project project, PointF[] points, Font font, float width, float height)
+        public static void Draw(Image<Rgba32> image, Project project, PointF[] points, Font font, float width, float height, Rgba32 bgColor)
         {
             var bg = new PathBuilder()
             .AddLine(new PointF(points[0].X, points[0].Y), new PointF(points[0].X + width, points[0].Y))
@@ -20,7 +20,7 @@ namespace RoadmapLogic
             .AddLine(new PointF(points[0].X + width, points[0].Y + height), new PointF(points[0].X, points[0].Y + height))
             .AddLine(new PointF(points[0].X, points[0].Y + height), new PointF(points[0].X, points[0].Y))
             .Build();
-            image.Mutate(x => x.Fill(Color.White, bg));
+            image.Mutate(x => x.Fill(bgColor, bg));
 
             int index = 0;
             if (!string.IsNullOrWhiteSpace(project.Name))
