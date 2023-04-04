@@ -55,6 +55,7 @@ function validateJson(jsonString) {
     }
 
     try {
+        validateJSON();
         return JSON.parse(jsonString);
     }
     catch {

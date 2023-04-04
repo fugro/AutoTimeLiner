@@ -63,7 +63,7 @@ function validateJSON() {
             var dateVal = item["date"];
             if (!isValidDate(dateVal)) {
               jsonError +=
-                'A project date is using an invalid format! Please use the format "dd MMM yyyy" example: "01 Jan 2023"<br>';
+                'A project date is using an invalid format! Please use the format "dd MMM yyyy" for simplicity: "01 Jan 2023"<br>';
             }
           }
         });
@@ -122,7 +122,9 @@ function isValidHexColor(str) {
 }
 
 function isValidDate(dateString) {
-  if (!/^\d{2} [a-zA-Z]{3} \d{4}$/.test(dateString)) {
+  if (!/^\d{1,2}[ -][a-zA-Z]{3}[ -]\d{4}$/.test(dateString)
+      && !/^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/.test(dateString)
+      && !/^\d{1,2}[/-]\d{1,2}[/-]\d{4}$/.test(dateString)) {
     return false;
   }
 
