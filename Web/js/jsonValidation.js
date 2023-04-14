@@ -26,7 +26,7 @@ function debounce(func, wait, immediate) {
 }
 
 function validateJSON() {
-  const jsonInput = $("#inputText").val();
+  const jsonInput = document.getElementById('inputText').value;
   let jsonError = "";
   try {
     const parsedJSON = JSON.parse(jsonInput);
@@ -73,13 +73,13 @@ function validateJSON() {
     }
     Object.keys(parsedJSON).forEach(function (key) {
       if (!validVariables.includes(key)) {
-        jsonError += `Invalid variable name: "${key}"<br>`;
+        jsonError += "Invalid variable name: " + key + "<br>";
       }
       if (key === "projects") {
         parsedJSON.projects.forEach(function (project) {
           Object.keys(project).forEach(function (projectKey) {
             if (!validProjectVariables.includes(projectKey)) {
-              jsonError += `Invalid project variable name: "${projectKey}"<br>`;
+              jsonError += "Invalid project variable name: " + projectKey + "<br>";
             }
           });
         });
@@ -99,17 +99,18 @@ function validateJSON() {
       } else {
         changeBackgroundColor("#ffffff");
       }
-      $("#inputText").val(formattedJSON);
+      document.getElementById('inputText').value = formattedJSON;
     } catch (e) {
       jsonError = e.message;
     }
   }
-  $("#jsonError").html(jsonError);
+  document.querySelector("#jsonError").innerHTML = jsonError;
 }
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
+  const inputText = document.querySelector("#inputText");
   const debouncedValidateJSON = debounce(validateJSON, 500);
-  $("#inputText").on("input", debouncedValidateJSON);
+  inputText.addEventListener("input", debouncedValidateJSON);
 });
 
 function changeBackgroundColor(hexColor) {
