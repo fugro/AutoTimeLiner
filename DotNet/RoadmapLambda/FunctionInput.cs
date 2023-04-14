@@ -9,6 +9,9 @@ namespace RoadmapLambda
     {
         public bool Debug { get; set; }
 
+        [JsonPropertyName("bg_color_hex")]
+        public string BackgroundColor { get; set; }
+
         public string Title { get; set; }
 
         public string Team { get; set; }
@@ -25,7 +28,7 @@ namespace RoadmapLambda
         /// </summary>
         public RoadmapLogic.Input ToRoadmapInput()
         {
-            return new RoadmapLogic.Input(Team, StartDate, Projects.Select(p => p.ToRoadmapProject()), Quarters, Debug, Title);
+            return new RoadmapLogic.Input(Team, StartDate, Projects.Select(p => p.ToRoadmapProject()), Quarters, Debug, Title, BackgroundColor);
         }
     }
 

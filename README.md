@@ -15,6 +15,8 @@ Older [Python](https://github.com/fugro/AutoTimeLiner/blob/main/AutoTimeLiner) c
     "team": "Your Team",
     "start_date": "01/01/2021",
     "quarters": 4,
+    "debug": false,
+    "bg_color_hex": "#ffffff",
     "projects": [
         {
             "name": "Build Product",
@@ -32,7 +34,11 @@ Older [Python](https://github.com/fugro/AutoTimeLiner/blob/main/AutoTimeLiner) c
 
 *start_date* - Defines the first calendar quarter to be used in the roadmap.
 
-*quarters* - Between 1 and 6 (optional; defaults to 4).
+*quarters* - Between 1 and 6 (optional; default of 6 if not provided).
+
+*debug* - Display all projects, regardless of overlapping lines to identify causes of missing projects.
+
+*bg_color_hex* - set the background color for the generated roadmap. for an easy color picket visit https://www.color-hex.com/
 
 All date values are accepted in a variety of formats:
 * `2021/09/05`
