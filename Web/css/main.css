@@ -182,3 +182,62 @@ input[type=file] {
   .col-1 {width: 40%;}
   .col-2 {width: 60%;}
 }
+
+#cursor-position {
+  color: red;
+  margin-left: 1em;
+  display: block;
+  float: right;
+  position: absolute;
+  font-size: 12px;
+}
+
+#jsonError {
+  position: fixed;
+  z-index: 999999999;
+  bottom: 1em;
+  left: 1em;
+  color: red;
+  padding: 1em;
+  border: solid 1px;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: white;
+  border-right: 2px solid red;
+  border-bottom: 2px solid red;
+}
+
+#jsonError:empty {
+  display: none;
+}
+
+.help:hover .popup {
+  display: block;
+}
+
+.helpIcon {
+  background: steelblue;
+  color: white;
+  border-radius: 15px;
+  width: 22px;
+  padding-left: 8px;
+  font-weight: 700;
+}
+
+.help {
+  float: right;
+}
+
+.popup {
+  display: none;
+  max-width: 550px;
+  position: absolute;
+  bottom: 5em;
+  left: 5em;
+  border: 1px solid #011E41;
+  background-color: #F1EFEF;
+  padding: 1em;
+  border-bottom: 3px solid #011E41;
+  border-right: 3px solid #011E41;
+  border-radius: 5px;
+}

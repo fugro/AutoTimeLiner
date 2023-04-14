@@ -55,6 +55,7 @@ function validateJson(jsonString) {
     }
 
     try {
+        validateJSON();
         return JSON.parse(jsonString);
     }
     catch {
@@ -63,7 +64,13 @@ function validateJson(jsonString) {
 }
 
 function runUsingJsonFromTextArea() {
-    run(document.getElementById('inputText').value);
+    const jsonErrorDiv = document.getElementById('jsonError');
+    if (jsonErrorDiv.textContent.trim().length === 0) {
+        run(document.getElementById('inputText').value);
+    }
+    else {
+        document.getElementById('jsonError').innerHTML = 'Please fix any JSON errors before attempting to generate a Roadmap!';
+    }
 }
 
 function run(jsonString) {
@@ -141,3 +148,26 @@ function downloadToFile(content, filename, contentType) {
 }
 
 document.getElementById('inputText').addEventListener('input', () => loadingMessage.clear());
+
+const jsonInput = document.getElementById("inputText");
+const cursorPosition = document.getElementById("cursor-position");
+
+jsonInput.addEventListener("input", () => {
+  const pos = jsonInput.selectionStart;
+  cursorPosition.textContent = `Cursor position: ${pos}`;
+});
+
+jsonInput.addEventListener("keyup", () => {
+  const pos = jsonInput.selectionStart;
+  cursorPosition.textContent = `Cursor position: ${pos}`;
+});
+
+jsonInput.addEventListener("click", () => {
+  const pos = jsonInput.selectionStart;
+  cursorPosition.textContent = `Cursor position: ${pos}`;
+});
+
+jsonInput.addEventListener("blur", () => {
+  cursorPosition.textContent = "";
+});
+

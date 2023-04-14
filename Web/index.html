@@ -38,10 +38,28 @@
                         <input id="inputFile" type="file" onchange="uploadFile()" style="margin-bottom: 10px" />
                             Choose File
                     </label>
+                        <div id="cursor-position"></div>
                         <textarea id="inputText" style="min-width: 100%; height: 500px"></textarea>
+                        <div id="jsonError" class="text-danger"></div>
                         <button type="button" class="primary" onclick="saveToFile()">Save JSON to file</button>
                         <button type="button" class="primary" onclick="runUsingJsonFromTextArea()">Generate Roadmap</button>
                         <button type="button" onclick="useSample()">Use sample JSON</button>
+                        <div class="help">
+                          <div class="helpIcon">?</div>
+                          <div class="popup">
+                            <table>
+                              <tr><th colspan="2">Help</th></tr>
+                              <tr><th>quarters</th><td>Number of quarters to display (1 to 6)</td></tr>
+                              <tr><th>debug</th><td>Setting to true can help identify issues in generated roadmap</td></tr>
+                              <tr><th>bg_color_hex</th><td>Background color to use in the roadmap</td></tr>
+                              <tr><th>start_date</th><td>Mandatory: The date used to determine the first quarter to display</td></tr>
+                              <tr><th>projects</th><td>Mandatory: All projects require a date!</td></tr>
+                          </tbody>
+                      </table>
+                      <br>
+                      <strong>Important:</strong> It is suggested to use dd MMM yyyy for dates to ensure accuracy during month/day interpretation.
+                          </div>
+                        </div>
                     </form>   
                     </div>
                 </div>
@@ -56,5 +74,6 @@
     <script src="js/loadingMessage.js"></script>
     <script src="js/app.js"></script>
     <script src="js/ui.js"></script>
+    <script src="js/jsonValidation.js"></script>
 </body>
 </html>
